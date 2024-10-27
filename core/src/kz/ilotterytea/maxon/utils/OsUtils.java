@@ -11,7 +11,7 @@ public class OsUtils {
 
     public static boolean isMobile = isIos || isAndroid;
 
-    public static final boolean isPC = isWindows || isMac || isIos;
+    public static final boolean isPC = isWindows || isMac || isLinux;
 
     static {
         try {
