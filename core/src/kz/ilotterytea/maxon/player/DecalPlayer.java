@@ -1,6 +1,7 @@
 package kz.ilotterytea.maxon.player;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -63,10 +64,10 @@ public class DecalPlayer implements Disposable {
     }
 
     public void render(Camera camera) {
-        checkCollisions(camera);
+        if (checkCollisions(camera) || Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) pet();
     }
 
-    private void checkCollisions(Camera camera) {
+    private boolean checkCollisions(Camera camera) {
         Ray ray = null;
 
         if (Gdx.input.justTouched()) {
@@ -74,20 +75,22 @@ public class DecalPlayer implements Disposable {
         }
 
         if (ray == null) {
-            return;
+            return false;
         }
 
         Vector3 intersection = new Vector3();
 
-        if (Intersector.intersectRayBounds(ray, box, intersection)) {
-            updateTextureRegion();
-            savegame.increaseMoney(1);
+        return Intersector.intersectRayBounds(ray, box, intersection);
+    }
 
-            Sound sound = MaxonGame.getInstance().assetManager.get("sfx/player/purr.ogg", Sound.class);
-            sound.play();
+    private void pet() {
+        updateTextureRegion();
+        savegame.increaseMoney(1);
 
-            clickStreak++;
-        }
+        Sound sound = MaxonGame.getInstance().assetManager.get("sfx/player/purr.ogg", Sound.class);
+        sound.play();
+
+        clickStreak++;
     }
 
     private void updateTextureRegion() {
