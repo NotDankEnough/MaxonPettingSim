@@ -108,3 +108,9 @@ Thumbs.db
 /ios/IOSLauncher.app.dSYM
 
 assets.txt
+
+## Packr
+/out-win
+/out-mac
+packr.jar
+pack.bat
