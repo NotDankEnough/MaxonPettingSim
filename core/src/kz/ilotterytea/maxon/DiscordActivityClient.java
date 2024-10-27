@@ -37,6 +37,10 @@ public class DiscordActivityClient implements Disposable {
         task = new Timer.Task() {
             @Override
             public void run() {
+                if (core == null) {
+                    super.cancel();
+                    return;
+                }
                 updateActivity();
                 core.runCallbacks();
             }
@@ -57,7 +61,7 @@ public class DiscordActivityClient implements Disposable {
     }
 
     private void updateActivity() {
-        if (!core.isDiscordRunning()) return;
+        if (core == null || !core.isDiscordRunning()) return;
 
         try (Activity activity = new Activity()) {
             MaxonGame game = MaxonGame.getInstance();
