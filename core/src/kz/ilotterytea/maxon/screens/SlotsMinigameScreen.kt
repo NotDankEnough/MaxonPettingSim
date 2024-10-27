@@ -26,6 +26,7 @@ import kz.ilotterytea.maxon.MaxonGame
 import kz.ilotterytea.maxon.localization.LineId
 import kz.ilotterytea.maxon.player.Savegame
 import kz.ilotterytea.maxon.screens.game.GameScreen
+import kz.ilotterytea.maxon.tasks.MultiplierTask
 import kz.ilotterytea.maxon.utils.formatters.NumberFormatter
 import kotlin.math.roundToInt
 import kotlin.math.roundToLong
@@ -75,6 +76,8 @@ class SlotsMinigameScreen : Screen {
     private val tasks = arrayListOf<Pair<Task, Float>>()
 
     private val audioLoop: Music = game.assetManager.get("mus/minigames/slots/slots_loop.mp3")
+
+    private val multiplierTask = MultiplierTask(savegame)
 
     override fun show() {
         // Skins
@@ -205,6 +208,8 @@ class SlotsMinigameScreen : Screen {
 
         audioLoop.isLooping = true
 
+        Timer.schedule(multiplierTask, 0.1f, 0.1f)
+
         Gdx.input.inputProcessor = stage
     }
 
@@ -214,6 +219,8 @@ class SlotsMinigameScreen : Screen {
 
         stage.act(delta)
         stage.draw()
+
+        moneyLabel?.setText(NumberFormatter.format(savegame.money, false))
     }
 
     private fun reRoll() {
@@ -325,7 +332,7 @@ class SlotsMinigameScreen : Screen {
         val prizeText = if (prize == 0.0) {
             game.locale.getLine(LineId.MinigameSlotsNothing)
         } else {
-            game.locale.getFormattedLine(LineId.MinigameSlotsPrize, NumberFormatter.format(prize))
+            game.locale.getFormattedLine(LineId.MinigameSlotsPrize, NumberFormatter.format(prize, false))
         }
 
         prizeLabel?.setText(prizeText)
@@ -336,13 +343,13 @@ class SlotsMinigameScreen : Screen {
             val stakeText = if (savegame.money.roundToInt() <= 0) {
                 "---"
             } else {
-                NumberFormatter.format(savegame.money)
+                savegame.money.roundToInt().toString()
             }
 
             stakeField?.text = stakeText
         }
 
-        moneyLabel?.setText(NumberFormatter.format(savegame.money))
+        moneyLabel?.setText(NumberFormatter.format(savegame.money, false))
     }
 
     private fun disableSlotMachineIfNoStake() {
@@ -400,6 +407,7 @@ class SlotsMinigameScreen : Screen {
         }
 
         tasks.clear()
+        multiplierTask.cancel()
         stage.dispose()
         audioLoop.stop()
     }

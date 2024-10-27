@@ -25,6 +25,7 @@ import kz.ilotterytea.maxon.player.DecalPlayer;
 import kz.ilotterytea.maxon.player.Savegame;
 import kz.ilotterytea.maxon.screens.MenuScreen;
 import kz.ilotterytea.maxon.screens.game.shop.ShopUI;
+import kz.ilotterytea.maxon.tasks.MultiplierTask;
 import kz.ilotterytea.maxon.ui.*;
 import kz.ilotterytea.maxon.ui.game.QuickActionsTable;
 import kz.ilotterytea.maxon.utils.OsUtils;
@@ -105,29 +106,7 @@ public class GameScreen implements Screen, InputProcessor {
         }, 10, 10));
 
         // Add a 1/10th multiplier to the money every 1/10th of a second.
-        tasks.add(Timer.schedule(new Timer.Task() {
-            @Override
-            public void run() {
-                double multiplier = 0.0f;
-
-                for (String id : savegame.getPurchasedPets().keySet()) {
-                    Pet pet = game.getPetManager().getPet(id);
-
-                    if (pet == null) {
-                        continue;
-                    }
-
-                    int amount = savegame.getPurchasedPets().get(id);
-
-                    double m = pet.getMultiplier() * amount;
-                    multiplier += m;
-                }
-
-                multiplier /= 10f;
-
-                savegame.increaseMoney(multiplier);
-            }
-        }, 0.1f, 0.1f));
+        tasks.add(Timer.schedule(new MultiplierTask(savegame), 0.1f, 0.1f));
 
         camera.update();
         render(Gdx.graphics.getDeltaTime());
