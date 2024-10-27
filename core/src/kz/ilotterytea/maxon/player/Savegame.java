@@ -83,7 +83,7 @@ public class Savegame implements Serializable {
 
             logger.info("Saved the game");
         } catch (IOException e) {
-            throw new RuntimeException("Failed to save the game", e);
+            logger.error("Failed to save the game: {}", e.toString());
         }
     }
 
