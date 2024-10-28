@@ -358,7 +358,7 @@ public class ShopUI {
 
     public void render() {
         this.pointsLabel.setText(NumberFormatter.format(savegame.getMoney(), false));
-        this.multiplierLabel.setText(String.format("%s/s", NumberFormatter.format(savegame.getMultiplier())));
+        //this.multiplierLabel.setText(String.format("%s/s", NumberFormatter.format(savegame.getMultiplier())));
         updatePurchaseItems();
     }
 
@@ -373,5 +373,9 @@ public class ShopUI {
 
     public boolean isShopListOpened() {
         return isShopListOpened;
+    }
+
+    public Label getMultiplierLabel() {
+        return multiplierLabel;
     }
 }

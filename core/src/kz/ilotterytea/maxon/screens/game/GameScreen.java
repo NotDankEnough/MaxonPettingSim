@@ -106,7 +106,7 @@ public class GameScreen implements Screen, InputProcessor {
         }, 10, 10));
 
         // Add a 1/10th multiplier to the money every 1/10th of a second.
-        tasks.add(Timer.schedule(new MultiplierTask(savegame), 0.1f, 0.1f));
+        tasks.add(Timer.schedule(new MultiplierTask(savegame, decalPlayer, shopUI.getMultiplierLabel()), 0.1f, 0.1f));
 
         camera.update();
         render(Gdx.graphics.getDeltaTime());
