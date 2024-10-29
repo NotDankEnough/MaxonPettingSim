@@ -5,6 +5,10 @@
   "menu.continue": "ПРОДОЛЖИТЬ",
   "menu.reset": "СБРОСИТЬ",
 
+  "sounds.title": "Микшер",
+  "sounds.music": "Музыка",
+  "sounds.sfx": "SFX",
+
   "giftbox.open": "Ты получил",
 
   "minigame.slots.nothing": "ТЫ НИЧЕГО НЕ ВЫИГРАЛ",

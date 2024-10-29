@@ -12,6 +12,11 @@ class Playlist(vararg musics: Music) {
     private var index = 0
 
     var shuffleMode = false
+    var volume = 1f
+        set(value) {
+            playingNow.volume = value
+            field = value
+        }
 
     /**
      * Play next music.
@@ -22,13 +27,14 @@ class Playlist(vararg musics: Music) {
         if (shuffleMode) {
             index = Math.getRandomNumber(0, playlist.size - 1)
             playingNow = playlist[index]
-            playingNow.play()
         } else {
             index++
             if (index > playlist.size - 1) index = 0
 
             playingNow = playlist[index]
-            playingNow.play()
         }
+
+        playingNow.volume = volume
+        playingNow.play()
     }
 }

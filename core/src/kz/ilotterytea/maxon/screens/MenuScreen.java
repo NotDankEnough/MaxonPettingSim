@@ -9,11 +9,13 @@ import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.RepeatAction;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Timer;
@@ -41,6 +43,7 @@ public class MenuScreen implements Screen {
     private MaxonGame game;
 
     private Stage stage;
+    private Skin uiSkin;
     private Music menuMusic;
 
     private final Savegame savegame = Savegame.getInstance();
@@ -50,6 +53,7 @@ public class MenuScreen implements Screen {
 
     private final ArrayList<Timer.Task> tasks = new ArrayList<>();
     private Sound clickSound;
+    private float soundVolume;
 
     @Override public void show() {
         this.game = MaxonGame.getInstance();
@@ -59,7 +63,7 @@ public class MenuScreen implements Screen {
         this.stage = new Stage(new ScreenViewport());
         this.stage.addAction(Actions.sequence(Actions.alpha(0.0f), Actions.alpha(1.0f, 1f)));
 
-        Skin uiSkin = game.assetManager.get("sprites/gui/ui.skin", Skin.class);
+        this.uiSkin = game.assetManager.get("sprites/gui/ui.skin", Skin.class);
         Skin widgetSkin = game.assetManager.get("sprites/gui/widgets.skin", Skin.class);
         TextureAtlas brandAtlas = game.assetManager.get("sprites/gui/brand.atlas", TextureAtlas.class);
 
@@ -68,6 +72,7 @@ public class MenuScreen implements Screen {
         menuMusic.setLooping(true);
 
         clickSound = game.assetManager.get("sfx/ui/click.ogg", Sound.class);
+        soundVolume = game.prefs.getInteger("sfx", 10) / 10f;
 
         // - - - - - -  U I  - - - - - -
         Table menuTable = new Table();
@@ -164,7 +169,7 @@ public class MenuScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
-                clickSound.play();
+                clickSound.play(soundVolume);
                 Gdx.app.exit();
             }
         });
@@ -206,14 +211,15 @@ public class MenuScreen implements Screen {
 
                 game.setScreen(new SplashScreen());
                 menuMusic.stop();
-                clickSound.play();
+                clickSound.play(soundVolume);
             }
         });
 
         // Music button
+        menuMusic.setVolume(game.prefs.getInteger("music", 10) / 10f);
         String musicButtonStyleName;
 
-        if (game.prefs.getBoolean("music")) {
+        if (OsUtils.isPC || game.prefs.getInteger("music", 10) > 0) {
             musicButtonStyleName = "music_on";
             menuMusic.play();
         } else {
@@ -226,9 +232,15 @@ public class MenuScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
 
-                String style;
+                if (OsUtils.isPC) {
+                    openSoundControl();
+                    return;
+                }
 
-                if (game.prefs.getBoolean("music")) {
+                String style;
+                int v = game.prefs.getInteger("music", 10);
+
+                if (v > 0) {
                     style = "music_off";
                     menuMusic.pause();
                 } else {
@@ -236,11 +248,11 @@ public class MenuScreen implements Screen {
                     menuMusic.play();
                 }
 
-                game.prefs.putBoolean("music", !game.prefs.getBoolean("music"));
+                game.prefs.putInteger("music", game.prefs.getInteger("music", 10) > 0 ? 0 : 10);
                 game.prefs.flush();
 
                 musicButton.setDrawable(widgetSkin, style);
-                clickSound.play();
+                clickSound.play(soundVolume);
             }
         });
 
@@ -277,7 +289,7 @@ public class MenuScreen implements Screen {
                     game.prefs.flush();
 
                     resolutionButton.setDrawable(widgetSkin, style);
-                    clickSound.play();
+                    clickSound.play(soundVolume);
                 }
             });
             rightGameControlTable.add(resolutionButton);
@@ -329,8 +341,6 @@ public class MenuScreen implements Screen {
 
         create3D();
         Gdx.input.setInputProcessor(stage);
-
-        if (game.prefs.getBoolean("music", true)) menuMusic.play();
     }
 
     @Override
@@ -420,5 +430,93 @@ public class MenuScreen implements Screen {
         sceneManager.environment.set(PBRCubemapAttribute.createDiffuseEnv(diffuseCubemap));
 
         sceneManager.setSkyBox(new SceneSkybox(environmentCubemap));
+    }
+
+    private void openSoundControl() {
+        Image bgTint = new Image(uiSkin, "halftransparentblack");
+        bgTint.setFillParent(true);
+        stage.addActor(bgTint);
+
+        // Table
+        Table table = new Table();
+        table.setFillParent(true);
+        table.align(Align.center);
+
+        stage.addActor(table);
+
+        // Window
+        Table window = new Table(uiSkin);
+        window.setBackground("bg");
+        window.align(Align.center);
+        table.add(window).size(400f, 250f);
+
+        // Table for title and close button
+        Table titleTable = new Table(uiSkin);
+        titleTable.setBackground("bg2");
+        window.add(titleTable).growX().row();
+
+        // Title
+        Label titleLabel = new Label(game.getLocale().getLine(LineId.SoundsTitle), uiSkin);
+        titleTable.add(titleLabel).pad(8f, 16f, 8f, 16f).growX();
+
+        // Close button
+        TextButton closeButton = new TextButton(" X ", uiSkin);
+        closeButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                super.clicked(event, x, y);
+                table.remove();
+                bgTint.remove();
+                clickSound.play(soundVolume);
+            }
+        });
+        titleTable.add(closeButton).pad(8f, 16f, 8f, 16f);
+
+        // Table for sliders
+        Table contentTable = new Table();
+        window.add(contentTable).pad(16f).grow().row();
+
+        // Creating sliders
+        String[] sliderNames = {"music", "sfx"};
+
+        for (String sliderName : sliderNames) {
+            Label name = new Label(game.getLocale().getLine(LineId.fromJson("sounds." + sliderName)), uiSkin);
+            Slider slider = new Slider(0f, 10f, 1f, false, uiSkin);
+            slider.addListener(new ChangeListener() {
+                @Override
+                public void changed(ChangeEvent event, Actor actor) {
+                    if (actor instanceof Slider s) {
+                        int v = (int) s.getValue();
+                        game.prefs.putInteger(sliderName, v);
+                        game.prefs.flush();
+
+                        switch (sliderName) {
+                            case "music":
+                                menuMusic.setVolume(v / 10f);
+                                break;
+                            case "sfx":
+                                soundVolume = v / 10f;
+                                break;
+                            default:
+                                break;
+                        }
+
+                        clickSound.play(soundVolume);
+                    }
+                }
+            });
+
+            int value = game.prefs.getInteger(sliderName, 10);
+
+            if (value > 10) value = 10;
+            else if (value < 0) value = 0;
+
+            slider.setValue(value);
+            game.prefs.putInteger(sliderName, value);
+            game.prefs.flush();
+
+            contentTable.add(name).grow();
+            contentTable.add(slider).grow().row();
+        }
     }
 }

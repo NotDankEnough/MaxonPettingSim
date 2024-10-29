@@ -48,6 +48,7 @@ public class Giftbox implements Disposable {
 
     private final Sound openedSound;
     private final Music openedMusic;
+    private final float soundVolume;
 
     private final AnimatedImage boxImage;
 
@@ -95,8 +96,13 @@ public class Giftbox implements Disposable {
             this.openedSound = assetManager.get("sfx/giftbox/giftbox_click.ogg");
         }
 
+        this.soundVolume = MaxonGame.getInstance().prefs.getInteger("sfx", 10) / 10f;
+
         this.openedMusic = assetManager.get("mus/giftbox/giftbox_opened.mp3");
         openedMusic.setLooping(true);
+
+        float musicVolume = MaxonGame.getInstance().prefs.getInteger("music", 10) / 10f;
+        openedMusic.setVolume(musicVolume);
 
         this.boxPosition = new Vector3(3.3f, 0f, 0.4f);
         this.boxScale = new Vector3(2f, 2f, 2f);
@@ -150,7 +156,7 @@ public class Giftbox implements Disposable {
             path = "models/props/giftbox/giftbox_opened.glb";
             sceneManager.environment.add(light);
 
-            if (!openedMusic.isPlaying() && MaxonGame.getInstance().prefs.getBoolean("music", true)) {
+            if (!openedMusic.isPlaying()) {
                 openedMusic.play();
             }
         } else {
@@ -163,7 +169,7 @@ public class Giftbox implements Disposable {
             }
 
             if (isActive) {
-                openedSound.play();
+                openedSound.play(soundVolume);
             }
         }
 
@@ -188,7 +194,7 @@ public class Giftbox implements Disposable {
             boxImage.setX(-boxImage.getWidth());
             stage.addActor(boxImage);
 
-            openedSound.play();
+            openedSound.play(soundVolume);
         } else {
             restartTimer();
             boxImage.remove();

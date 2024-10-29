@@ -90,7 +90,8 @@ public class GameScreen implements Screen, InputProcessor {
                 game.assetManager.get("mus/game/shopping_spree.mp3", Music.class)
         );
         playlist.setShuffleMode(true);
-        if (game.prefs.getBoolean("music", true)) playlist.next();
+        playlist.setVolume(game.prefs.getInteger("music", 10) / 10f);
+        playlist.next();
 
         createStageUI();
 

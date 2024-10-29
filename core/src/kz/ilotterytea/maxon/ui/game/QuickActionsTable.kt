@@ -17,12 +17,13 @@ class QuickActionsTable(skin: Skin) : Table() {
     init {
         val game = MaxonGame.getInstance()
         val clickSound = game.assetManager.get("sfx/ui/click.ogg", Sound::class.java)
+        val soundVolume = game.prefs.getInteger("sfx", 10) / 10f
 
         val slotsButton = ShakingImageButton(skin, "slots")
         slotsButton.addListener(object : ClickListener() {
             override fun clicked(event: InputEvent, x: Float, y: Float) {
                 super.clicked(event, x, y)
-                clickSound.play()
+                clickSound.play(soundVolume)
                 game.screen = SlotsMinigameScreen()
             }
         })
@@ -32,7 +33,7 @@ class QuickActionsTable(skin: Skin) : Table() {
         quitButton.addListener(object : ClickListener() {
             override fun clicked(event: InputEvent, x: Float, y: Float) {
                 super.clicked(event, x, y)
-                clickSound.play()
+                clickSound.play(soundVolume)
                 game.screen = MenuScreen()
             }
         })

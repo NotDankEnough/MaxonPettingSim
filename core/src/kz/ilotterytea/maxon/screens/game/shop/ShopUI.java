@@ -37,6 +37,7 @@ public class ShopUI {
     private final ArrayList<PetWidget> petWidgets = new ArrayList<>();
 
     private final Sound clickSound, notEnoughMoneySound, purchaseSound, sellSound;
+    private final float soundVolume;
 
     private final String styleName = OsUtils.isMobile ? "defaultMobile" : "default";
 
@@ -47,6 +48,7 @@ public class ShopUI {
         this.notEnoughMoneySound = game.assetManager.get("sfx/shop/not_enough_money.ogg", Sound.class);
         this.purchaseSound = game.assetManager.get("sfx/shop/purchase.ogg", Sound.class);
         this.sellSound = game.assetManager.get("sfx/shop/sell.ogg", Sound.class);
+        this.soundVolume = game.prefs.getInteger("sfx", 10) / 10f;
 
         this.skin = skin;
         this.atlas = atlas;
@@ -169,7 +171,7 @@ public class ShopUI {
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
                 if (!sellButton.isDisabled()) {
-                    clickSound.play();
+                    clickSound.play(soundVolume);
                 }
 
                 mode = ShopMode.SELL;
@@ -183,7 +185,7 @@ public class ShopUI {
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
                 if (!buyButton.isDisabled()) {
-                    clickSound.play();
+                    clickSound.play(soundVolume);
                 }
 
                 mode = ShopMode.BUY;
@@ -210,7 +212,7 @@ public class ShopUI {
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
                 if (!x1Button.isDisabled()) {
-                    clickSound.play();
+                    clickSound.play(soundVolume);
                 }
 
                 multiplier = ShopMultiplier.X1;
@@ -224,7 +226,7 @@ public class ShopUI {
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
                 if (!x10Button.isDisabled()) {
-                    clickSound.play();
+                    clickSound.play(soundVolume);
                 }
 
                 multiplier = ShopMultiplier.X10;
@@ -252,7 +254,7 @@ public class ShopUI {
                     super.clicked(event, x, y);
 
                     if (widget.isDisabled()) {
-                        notEnoughMoneySound.play();
+                        notEnoughMoneySound.play(soundVolume);
                         return;
                     }
 
@@ -269,7 +271,7 @@ public class ShopUI {
                                 pet.getId(),
                                 amount + multiplier.getMultiplier()
                         );
-                        purchaseSound.play();
+                        purchaseSound.play(soundVolume);
                     } else {
                         savegame.increaseMoney(widget.getPrice());
                         savegame.decreaseMultiplier(pet.getMultiplier() * multiplier.getMultiplier());
@@ -278,7 +280,7 @@ public class ShopUI {
                                 savegame.getPurchasedPets().get(pet.getId())
                                         - multiplier.getMultiplier()
                         );
-                        sellSound.play();
+                        sellSound.play(soundVolume);
                     }
                 }
             });
@@ -322,7 +324,7 @@ public class ShopUI {
                     savegame.getUnlockedPets().add(widget.getPet().getId());
 
                     Sound sound = MaxonGame.getInstance().assetManager.get("sfx/shop/unlocked.ogg");
-                    sound.play();
+                    sound.play(soundVolume);
                 }
 
                 continue;

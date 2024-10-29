@@ -16,6 +16,7 @@
     button_hover: { color: { hex: "#e58b41ff" }, name: idle },
     button_disabled: { color: { hex: "#1f1f1fff" }, name: pressed },
     bg: { color: { hex: "#1f1f1fff" }, name: pressed },
+    bg2: { color: { hex: "#2b221fff" }, name: pressed },
 
     white_tile: { color: white, name: tile },
 
@@ -216,4 +217,11 @@
       knobBefore: bar_fg
     }
   },
+  com.badlogic.gdx.scenes.scene2d.ui.Slider$SliderStyle: {
+    default-horizontal: {
+      background: bg,
+      knob: button_hover,
+      knobBefore: button_pressed
+    }
+  }
 }

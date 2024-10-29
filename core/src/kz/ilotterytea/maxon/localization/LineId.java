@@ -11,6 +11,10 @@ public enum LineId {
     MenuContinue,
     MenuReset,
 
+    SoundsTitle,
+    SoundsMusic,
+    SoundsSfx,
+
     GiftboxOpen,
 
     MinigameSlotsSpinbutton,

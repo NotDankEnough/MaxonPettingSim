@@ -26,6 +26,7 @@ public class SavegameWidget extends Table implements Disposable {
     private final Stage stage;
 
     private final Sound clickSound;
+    private final float soundVolume;
 
     private final String styleName = OsUtils.isMobile ? "defaultMobile" : "default";
     private final float iconSize = OsUtils.isMobile ? 64f : 32f;
@@ -36,6 +37,7 @@ public class SavegameWidget extends Table implements Disposable {
         this.stage = stage;
         this.atlas = game.assetManager.get("sprites/gui/player_icons.atlas", TextureAtlas.class);
         this.clickSound = game.assetManager.get("sfx/ui/click.ogg", Sound.class);
+        this.soundVolume = game.prefs.getInteger("sfx", 10) / 10f;
 
         this.skin = skin;
         this.savegame = savegame;
@@ -71,7 +73,7 @@ public class SavegameWidget extends Table implements Disposable {
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
                 moveToNextScreen();
-                clickSound.play();
+                clickSound.play(soundVolume);
             }
         });
     }
@@ -134,7 +136,7 @@ public class SavegameWidget extends Table implements Disposable {
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
                 moveToNextScreen();
-                clickSound.play();
+                clickSound.play(soundVolume);
             }
         });
 
@@ -149,7 +151,7 @@ public class SavegameWidget extends Table implements Disposable {
                 dataTable.clear();
                 savegame.delete();
                 createEmpty();
-                clickSound.play();
+                clickSound.play(soundVolume);
             }
         });
 

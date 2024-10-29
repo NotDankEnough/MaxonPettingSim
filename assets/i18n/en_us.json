@@ -5,6 +5,10 @@
   "menu.continue": "CONTINUE",
   "menu.reset": "RESET",
 
+  "sounds.title": "Mixer",
+  "sounds.music": "Music",
+  "sounds.sfx": "SFX",
+
   "giftbox.open": "You got",
 
   "minigame.slots.nothing": "YOU WON NOTHINGG",

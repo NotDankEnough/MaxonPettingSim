@@ -80,6 +80,14 @@ public class MaxonGame extends Game {
 			Gdx.graphics.setWindowedMode(width, height);
 		}
 
+		// Compatibility with old settings file
+		try {
+			int x = prefs.getInteger("music");
+		} catch (Exception ignored) {
+			prefs.putInteger("music", prefs.getBoolean("music") ? 10 : 0);
+			prefs.flush();
+		}
+
 		assetManager = new AssetManager();
 		petManager = new PetManager(assetManager);
 

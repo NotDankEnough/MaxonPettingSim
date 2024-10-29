@@ -76,6 +76,8 @@ class SlotsMinigameScreen : Screen {
     private val tasks = arrayListOf<Pair<Task, Float>>()
 
     private val audioLoop: Music = game.assetManager.get("mus/minigames/slots/slots_loop.mp3")
+    
+    private val soundVolume = game.prefs.getInteger("sfx", 10) / 10f
 
     private val multiplierTask = MultiplierTask(savegame)
 
@@ -192,7 +194,7 @@ class SlotsMinigameScreen : Screen {
         val lockColumnTask = object : Task() {
             override fun run() {
                 val sound = game.assetManager.get("sfx/minigames/slots/slots_lock.ogg", Sound::class.java)
-                sound.play()
+                sound.play(soundVolume)
 
                 lockedColumns += 1
 
@@ -207,6 +209,7 @@ class SlotsMinigameScreen : Screen {
         disableSlotMachineIfNoStake()
 
         audioLoop.isLooping = true
+        audioLoop.volume = game.prefs.getInteger("music", 10) / 10f
 
         Timer.schedule(multiplierTask, 0.1f, 0.1f)
 
@@ -277,10 +280,10 @@ class SlotsMinigameScreen : Screen {
     }
 
     private fun restart() {
-        if (game.prefs.getBoolean("music", true)) audioLoop.play()
+        audioLoop.play()
 
         val sound = game.assetManager.get<Sound>("sfx/minigames/slots/slots_start.ogg")
-        sound.play()
+        sound.play(soundVolume)
 
         prizeLabel?.setText("")
 
@@ -381,7 +384,7 @@ class SlotsMinigameScreen : Screen {
         }
 
         val sound = game.assetManager.get("sfx/minigames/slots/slots_$path.ogg", Sound::class.java)
-        sound.play()
+        sound.play(soundVolume)
     }
 
     override fun resize(width: Int, height: Int) {

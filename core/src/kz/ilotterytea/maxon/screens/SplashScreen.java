@@ -27,6 +27,7 @@ public class SplashScreen implements Screen {
     private TextureAtlas brandAtlas;
     private Skin contributorsSkin;
     private Sound clickSound;
+    private float soundVolume;
 
     private ProgressBar bar;
 
@@ -35,6 +36,7 @@ public class SplashScreen implements Screen {
     @Override public void show() {
         this.game = MaxonGame.getInstance();
         clickSound = Gdx.audio.newSound(Gdx.files.internal("sfx/ui/click.ogg"));
+        soundVolume = game.prefs.getInteger("sfx", 10) / 10f;
 
         this.stage = new Stage(new FitViewport(800, 600));
         Skin skin = new Skin(Gdx.files.internal("sprites/gui/ui.skin"));
@@ -87,7 +89,7 @@ public class SplashScreen implements Screen {
                 public void clicked(InputEvent event, float x, float y) {
                     super.clicked(event, x, y);
                     Gdx.net.openURI(url);
-                    clickSound.play();
+                    clickSound.play(soundVolume);
                 }
             });
 
