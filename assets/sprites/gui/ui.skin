@@ -6,6 +6,7 @@
     store_item_disabled: { hex: "#888888ff" },
     store_item_price_available: { hex: "#00ff00ff" },
     store_item_price_disabled: { hex: "#ff0000ff" },
+    store_item_amount: { hex: "#1b1412ff" },
 
     orange: {hex: "#ffa300ff" },
     yellow: {hex: "#ffec27ff" },
@@ -71,6 +72,10 @@
     store_item_price_mobile: {
       file: fnt/FontText.fnt,
       scaledSize: 30
+    },
+    store_item_amount: {
+      file: fnt/FontText.fnt,
+      scaledSize: 48
     },
     store_control: {
       file: fnt/FontText.fnt,
@@ -190,6 +195,10 @@
     store_item_price_disabled_mobile: {
       parent: store_item_price_mobile,
       fontColor: store_item_price_disabled
+    },
+    store_item_amount: {
+      font: store_item_amount,
+      fontColor: store_item_amount
     },
     slots: {
       font: slots,

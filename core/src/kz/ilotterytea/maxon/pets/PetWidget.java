@@ -17,7 +17,7 @@ import kz.ilotterytea.maxon.utils.formatters.NumberFormatter;
 public class PetWidget extends Table {
     private double price;
     private final Skin skin;
-    private final Label priceLabel, nameLabel;
+    private final Label priceLabel, nameLabel, amountLabel;
     private TextTooltip priceTooltip;
     private final Pet pet;
 
@@ -98,6 +98,9 @@ public class PetWidget extends Table {
                 }
             }
         });
+
+        this.amountLabel = new Label("", skin, "store_item_amount");
+        super.add(amountLabel);
     }
 
     public void setPrice(double price) {
@@ -167,6 +170,11 @@ public class PetWidget extends Table {
 
         this.nameLabel.clearListeners();
         this.nameLabel.addListener(tooltip);
+    }
+
+    public void setAmount(Integer amount) {
+        this.amountLabel.setVisible(amount > 0);
+        this.amountLabel.setText(amount);
     }
 
     public boolean isLocked() {

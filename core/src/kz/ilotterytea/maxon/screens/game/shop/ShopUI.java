@@ -248,6 +248,9 @@ public class ShopUI {
 
         for (Pet pet : pets) {
             PetWidget widget = new PetWidget(this.skin, pet, this.atlas);
+            Integer amount = savegame.getPurchasedPets().get(pet.getId());
+            if (amount == null) amount = 0;
+            widget.setAmount(amount);
             widget.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
@@ -258,12 +261,11 @@ public class ShopUI {
                         return;
                     }
 
-                    if (mode == ShopMode.BUY) {
-                        Integer amount = savegame.getPurchasedPets().get(pet.getId());
+                    Integer amount = savegame.getPurchasedPets().get(pet.getId());
+                    if (amount == null) amount = 0;
 
-                        if (amount == null) {
-                            amount = 0;
-                        }
+                    if (mode == ShopMode.BUY) {
+                        widget.setAmount(amount + multiplier.getMultiplier());
 
                         savegame.decreaseMoney(widget.getPrice());
                         savegame.increaseMultiplier(pet.getMultiplier() * multiplier.getMultiplier());
@@ -273,6 +275,8 @@ public class ShopUI {
                         );
                         purchaseSound.play(soundVolume);
                     } else {
+                        widget.setAmount(amount - multiplier.getMultiplier());
+
                         savegame.increaseMoney(widget.getPrice());
                         savegame.decreaseMultiplier(pet.getMultiplier() * multiplier.getMultiplier());
                         savegame.getPurchasedPets().put(
