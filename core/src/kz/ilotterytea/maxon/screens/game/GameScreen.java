@@ -184,7 +184,7 @@ public class GameScreen implements Screen, InputProcessor {
     public void resize(int width, int height) {
         this.stage.getViewport().update(width, height, true);
         sceneManager.updateViewport(width, height);
-        this.shopUI.update();
+        this.shopUI.resize(stage.getWidth());
     }
 
     @Override public void pause() {}
@@ -304,7 +304,8 @@ public class GameScreen implements Screen, InputProcessor {
             shopUI.createSavegameUI();
         }
 
-        shopUI.createShopTitleUI();
+        if (OsUtils.isMobile) shopUI.createShopTitleUI();
+        shopUI.createShopMerchant();
         shopUI.createShopControlUI();
         shopUI.createShopListUI();
 

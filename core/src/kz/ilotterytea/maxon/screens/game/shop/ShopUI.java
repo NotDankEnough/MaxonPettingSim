@@ -22,6 +22,7 @@ import java.util.ArrayList;
 public class ShopUI {
     private final Table table, mainTable;
     private Table controlTable, shopListTable;
+    private ShopMerchant merchant;
 
     private final Skin skin;
     private final TextureAtlas atlas;
@@ -41,6 +42,8 @@ public class ShopUI {
 
     private final String styleName = OsUtils.isMobile ? "defaultMobile" : "default";
 
+    private float stageWidth;
+
     public ShopUI(final Savegame savegame, Stage stage, Skin skin, TextureAtlas atlas) {
         this.savegame = savegame;
         MaxonGame game = MaxonGame.getInstance();
@@ -49,6 +52,8 @@ public class ShopUI {
         this.purchaseSound = game.assetManager.get("sfx/shop/purchase.ogg", Sound.class);
         this.sellSound = game.assetManager.get("sfx/shop/sell.ogg", Sound.class);
         this.soundVolume = game.prefs.getInteger("sfx", 10) / 10f;
+
+        this.stageWidth = stage.getWidth();
 
         this.skin = skin;
         this.atlas = atlas;
@@ -66,10 +71,15 @@ public class ShopUI {
             mainTable.add(this.table).growX();
         } else {
             mainTable.align(Align.center | Align.left);
-            mainTable.add(this.table).growY().width(Math.percentFromValue(25f, Gdx.graphics.getWidth()));
+            mainTable.add(this.table).growY().width(Math.percentFromValue(25f, (int) stageWidth));
         }
 
         stage.addActor(mainTable);
+    }
+
+    public void createShopMerchant() {
+        this.merchant = new ShopMerchant();
+        if (!OsUtils.isMobile) this.table.add(merchant).growX().row();
     }
 
     public void createSavegameUI() {
@@ -136,9 +146,11 @@ public class ShopUI {
                     isShopListOpened = !isShopListOpened;
 
                     if (isShopListOpened) {
+                        table.add(merchant).growX().row();
                         table.add(controlTable).grow().row();
                         table.add(shopListTable).grow().row();
                     } else {
+                        table.removeActor(merchant);
                         table.removeActor(controlTable);
                         table.removeActor(shopListTable);
                     }
@@ -368,13 +380,13 @@ public class ShopUI {
         updatePurchaseItems();
     }
 
-    public void update() {
-        if (OsUtils.isMobile) {
-            return;
-        }
+    public void resize(float width) {
+        if (OsUtils.isMobile) return;
+
+        this.stageWidth = width;
 
         this.mainTable.clear();
-        this.mainTable.add(this.table).growY().width(Math.percentFromValue(30f, Gdx.graphics.getWidth()));
+        this.mainTable.add(this.table).growY().width(Math.percentFromValue(30f, (int) stageWidth));
     }
 
     public boolean isShopListOpened() {
