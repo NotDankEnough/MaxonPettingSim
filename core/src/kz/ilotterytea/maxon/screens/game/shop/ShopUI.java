@@ -305,7 +305,8 @@ public class ShopUI {
             table.add(widget).growX().padBottom(5f).row();
         }
 
-        ScrollPane scrollPane = new ScrollPane(table);
+        ScrollPane scrollPane = new ScrollPane(table, this.skin);
+        scrollPane.setFadeScrollBars(false);
         scrollPane.setScrollingDisabled(true, false);
 
         shopListTable = new Table(this.skin);

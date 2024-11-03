@@ -233,5 +233,11 @@
       knob: button_hover,
       knobBefore: button_pressed
     }
+  },
+  com.badlogic.gdx.scenes.scene2d.ui.ScrollPane$ScrollPaneStyle: {
+    default: {
+      vScroll: bg,
+      vScrollKnob: button_hover
+    }
   }
 }
