@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.*;
+import kz.ilotterytea.javaextra.tuples.Triple;
 import kz.ilotterytea.maxon.MaxonConstants;
 import kz.ilotterytea.maxon.assets.AssetUtils;
 import kz.ilotterytea.maxon.MaxonGame;
@@ -68,8 +69,8 @@ public class SplashScreen implements Screen {
         ArrayList<Drawable> contributors = new ArrayList<>();
         contributorSkin = new Skin(Gdx.files.internal("sprites/gui/friends.skin"));
 
-        for (int i = 0; i < MaxonConstants.GAME_DEVELOPERS.length; i++) {
-            String name = MaxonConstants.GAME_DEVELOPERS[i][0];
+        for (Triple<String, String, Integer> contributor : MaxonConstants.GAME_DEVELOPERS) {
+            String name = contributor.getFirst();
             Drawable icon = contributorSkin.getDrawable(name);
             contributors.add(icon);
         }

@@ -1,10 +1,1 @@
-{
-  com.badlogic.gdx.scenes.scene2d.ui.ImageButton$ImageButtonStyle: {
-    ilotterytea: { up: ilotterytea },
-    greddyss: { up: greddyss },
-    enotegg: { up: enotegg },
-    namesake: { up: namesake },
-    saopin: { up: saopin },
-    gvardovskiy: { up: gvardovskiy }
-  }
-}
+{}
