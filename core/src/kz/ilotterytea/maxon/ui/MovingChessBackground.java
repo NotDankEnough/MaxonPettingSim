@@ -7,7 +7,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class MovingChessBackground {
@@ -33,10 +32,10 @@ public class MovingChessBackground {
             float velocityY,
             float screenWidth,
             float screenHeight,
-            Drawable... drawables
+            ArrayList<Drawable> drawables
     ) {
         this.tiles = new ArrayList<>();
-        this.drawables = Arrays.asList(drawables);
+        this.drawables = drawables;
 
         this.velocityX = velocityX;
         this.velocityY = velocityY;

@@ -22,6 +22,7 @@
     white_tile: { color: white, name: tile },
 
     halftransparentblack: { color: { hex: "#00000099" }, name: tile },
+    black: { color: { hex: "#000000" }, name: tile },
 
     // Store
     store: { color: { hex: "#59413aff" }, name: square },
