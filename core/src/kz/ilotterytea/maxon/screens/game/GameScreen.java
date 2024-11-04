@@ -149,10 +149,35 @@ public class GameScreen implements Screen, InputProcessor {
             }
 
             int amount = savegame.getPurchasedPets().get(id);
+            int majorAmount = amount / 10;
+            int minorAmount = amount % 10;
 
-            for (int i = 0; i < amount; i++) {
+            Color color = switch (majorAmount % 10) {
+                case 1, 2 -> Color.BLUE;
+                case 3, 4 -> Color.PINK;
+                case 5, 6 -> Color.ORANGE;
+                case 7, 8 -> Color.GREEN;
+                case 9 -> Color.GRAY;
+                default -> Color.WHITE;
+            };
+
+            for (int i = 0; i < majorAmount; i++) {
                 Decal decal = pet.getDecal();
-                petDecals.add(Decal.newDecal(decal.getWidth(), decal.getHeight(), decal.getTextureRegion()));
+                decal = Decal.newDecal(decal.getWidth(), decal.getHeight(), decal.getTextureRegion());
+                decal.setColor(color);
+
+                float multiplier = majorAmount * 0.1f;
+
+                decal.setScale(1.0f + multiplier);
+                decal.setY(decal.getY() + multiplier * 2.5f);
+
+                petDecals.add(decal);
+            }
+
+            for (int i = 0; i < minorAmount; i++) {
+                Decal decal = pet.getDecal();
+                decal = Decal.newDecal(decal.getWidth(), decal.getHeight(), decal.getTextureRegion());
+                petDecals.add(decal);
             }
         }
 
