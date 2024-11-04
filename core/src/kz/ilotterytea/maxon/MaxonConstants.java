@@ -26,7 +26,7 @@ public class MaxonConstants {
             new Triple<>("GreDDySS", "https://twitch.tv/greddyss", 2),
             new Triple<>("enotEGG_", "https://twitch.tv/enotegg_", 2),
             new Triple<>("NameIsNamesake", "https://twitter.com/nameisnamesake", 3),
-            new Triple<>("saopin_", "https://twitch.tv/saopin_", 3),
+            new Triple<>("saopin_", "https://soundcloud.com/saopin", 3),
             new Triple<>("Gvardovskiy", "https://twitch.tv/gvardovskiy", 4),
             new Triple<>("4elovekkun", "https://twitch.tv/4elovekkun", 5),
             new Triple<>("Art5507", "https://twitch.tv/art5507", 5),
