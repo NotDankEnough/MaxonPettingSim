@@ -9,6 +9,15 @@
   "sounds.music": "Музыка",
   "sounds.sfx": "SFX",
 
+  "credits.title": "Те, кто внёс вклад",
+  "credits.maxon": "Максон",
+  "credits.developer": "Разработчик",
+  "credits.contributor": "Внёс вклад",
+  "credits.music": "Музыка",
+  "credits.idea": "Раздатчик идей",
+  "credits.tester": "Тестер",
+  "credits.moral": "Моральная помощь",
+
   "giftbox.open": "Ты получил",
 
   "minigame.slots.nothing": "ТЫ НИЧЕГО НЕ ВЫИГРАЛ",

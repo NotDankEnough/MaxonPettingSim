@@ -2,10 +2,12 @@ brand.png
 size:1024,512
 repeat:none
 beta
-bounds:565,176,380,174
+bounds:565,226,380,174
 brand
-bounds:0,0,565,175
+bounds:0,50,565,175
+engine
+bounds:0,0,300,50
 online
-bounds:0,175,565,175
+bounds:0,225,565,175
 update
-bounds:565,2,236,174
+bounds:565,52,236,174

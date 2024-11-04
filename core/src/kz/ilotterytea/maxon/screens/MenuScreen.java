@@ -20,6 +20,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import kz.ilotterytea.javaextra.tuples.Triple;
 import kz.ilotterytea.maxon.MaxonConstants;
 import kz.ilotterytea.maxon.MaxonGame;
 import kz.ilotterytea.maxon.localization.LineId;
@@ -123,6 +124,14 @@ public class MenuScreen implements Screen {
 
             brandTable.add(logo);
         }
+
+        logo.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                super.clicked(event, x, y);
+                openCredits();
+            }
+        });
 
         Image updateLogo;
 
@@ -518,5 +527,124 @@ public class MenuScreen implements Screen {
             contentTable.add(name).grow();
             contentTable.add(slider).grow().row();
         }
+    }
+
+    private void openCredits() {
+        Image bgTint = new Image(uiSkin, "halftransparentblack");
+        bgTint.setFillParent(true);
+        stage.addActor(bgTint);
+
+        // Table
+        Table table = new Table();
+        table.setFillParent(true);
+        table.align(Align.center);
+
+        stage.addActor(table);
+
+        // Window
+        Table window = new Table(uiSkin);
+        window.setBackground("bg");
+        window.align(Align.center);
+        Cell<Table> tableCell = table.add(window);
+
+        if (OsUtils.isMobile) {
+            tableCell.growX();
+        } else {
+            tableCell.size(650f, 450f);
+        }
+
+        // Table for title and close button
+        Table titleTable = new Table(uiSkin);
+        titleTable.setBackground("bg2");
+        window.add(titleTable).growX().row();
+
+        // Title
+        Label titleLabel = new Label(game.getLocale().getLine(LineId.CreditsTitle), uiSkin);
+        titleTable.add(titleLabel).pad(8f, 16f, 8f, 16f).growX();
+
+        // Close button
+        TextButton closeButton = new TextButton(" X ", uiSkin);
+        closeButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                super.clicked(event, x, y);
+                table.remove();
+                bgTint.remove();
+                clickSound.play(soundVolume);
+            }
+        });
+        titleTable.add(closeButton).pad(8f, 16f, 8f, 16f);
+
+        // Table for contributors
+        Table contributorTable = new Table();
+        ScrollPane contributorPane = new ScrollPane(contributorTable, uiSkin);
+        contributorPane.setScrollingDisabled(true, false);
+        contributorPane.setFadeScrollBars(false);
+        window.add(contributorPane).pad(16f).grow().row();
+
+        // Creating contributors
+        Skin friendSkin = game.assetManager.get("sprites/gui/friends.skin");
+        for (int i = 0; i < MaxonConstants.GAME_DEVELOPERS.size(); i++) {
+            Triple<String, String, Integer> contributor = MaxonConstants.GAME_DEVELOPERS.get(i);
+
+            // Widget
+            Table widget = new Table();
+            widget.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    super.clicked(event, x, y);
+                    Gdx.net.openURI(contributor.getSecond());
+                    clickSound.play(soundVolume);
+                }
+            });
+            widget.align(Align.center);
+            contributorTable.add(widget).padBottom(16f);
+
+            // Name
+            Label name = new Label(contributor.getFirst(), uiSkin, "credits_name");
+            name.setAlignment(Align.center);
+            widget.add(name).grow().padBottom(8f).row();
+
+            // Icon
+            Image icon = new Image(friendSkin.getDrawable(contributor.getFirst()));
+            widget.add(icon).padBottom(8f).row();
+
+            // Role
+            LineId id = switch (contributor.getThird()) {
+                case 1 -> LineId.CreditsDeveloper;
+                case 2 -> LineId.CreditsContributor;
+                case 3 -> LineId.CreditsMusic;
+                case 4 -> LineId.CreditsIdea;
+                case 5 -> LineId.CreditsTester;
+                case 6 -> LineId.CreditsMoral;
+                default -> LineId.CreditsMaxon;
+            };
+
+            Label role = new Label(game.getLocale().getLine(id), uiSkin, "credits_role");
+            role.setAlignment(Align.center);
+            widget.add(role).grow().row();
+
+            if (i % 3 == 2) contributorTable.row();
+        }
+
+        // Game engine credits
+        Table engineCredits = new Table(uiSkin);
+        engineCredits.setBackground("bg2");
+        window.add(engineCredits).growX().row();
+
+        Label engineLabel = new Label("Made with", uiSkin);
+        engineCredits.add(engineLabel).padRight(16f);
+
+        TextureAtlas brandAtlas = game.assetManager.get("sprites/gui/brand.atlas");
+        Image engineImage = new Image(brandAtlas.findRegion("engine"));
+        engineImage.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                super.clicked(event, x, y);
+                Gdx.net.openURI("https://libgdx.com");
+                clickSound.play(soundVolume);
+            }
+        });
+        engineCredits.add(engineImage).height(32f).width(180f);
     }
 }

@@ -9,6 +9,15 @@
   "sounds.music": "Music",
   "sounds.sfx": "SFX",
 
+  "credits.title": "Those who contributed",
+  "credits.maxon": "Maxon himself",
+  "credits.developer": "Developer",
+  "credits.contributor": "Contributor",
+  "credits.music": "Music",
+  "credits.idea": "Idea dispenser",
+  "credits.tester": "Tester",
+  "credits.moral": "Moral supporter",
+
   "giftbox.open": "You got",
 
   "minigame.slots.nothing": "YOU WON NOTHINGG",

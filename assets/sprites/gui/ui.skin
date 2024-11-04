@@ -93,6 +93,10 @@
     slots: {
       file: fnt/FontText.fnt,
       scaledSize: 16
+    },
+    credits: {
+      file: fnt/FontText.fnt,
+      scaledSize: 16
     }
   },
   com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle: {
@@ -204,6 +208,14 @@
     slots: {
       font: slots,
       fontColor: white
+    },
+    credits_name: {
+      font: credits,
+      fontColor: white
+    },
+    credits_role: {
+      font: credits,
+      fontColor: yellow
     }
   },
   com.badlogic.gdx.scenes.scene2d.ui.TextField$TextFieldStyle: {

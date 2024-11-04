@@ -15,6 +15,15 @@ public enum LineId {
     SoundsMusic,
     SoundsSfx,
 
+    CreditsTitle,
+    CreditsMaxon,
+    CreditsDeveloper,
+    CreditsContributor,
+    CreditsMusic,
+    CreditsIdea,
+    CreditsTester,
+    CreditsMoral,
+
     GiftboxOpen,
 
     MinigameSlotsSpinbutton,
