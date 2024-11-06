@@ -12,14 +12,21 @@ import kz.ilotterytea.maxon.MaxonGame
 import kz.ilotterytea.maxon.screens.MenuScreen
 import kz.ilotterytea.maxon.screens.SlotsMinigameScreen
 import kz.ilotterytea.maxon.ui.ShakingImageButton
+import kz.ilotterytea.maxon.utils.OsUtils
 
-class QuickActionsTable(skin: Skin) : Table() {
+class QuickActionsTable(widgetSkin: Skin, uiSkin: Skin) : Table(uiSkin) {
     init {
         val game = MaxonGame.getInstance()
         val clickSound = game.assetManager.get("sfx/ui/click.ogg", Sound::class.java)
         val soundVolume = game.prefs.getInteger("sfx", 10) / 10f
+        val iconSize = if (OsUtils.isMobile) {
+            256f
+        } else {
+            64f
+        }
 
-        val slotsButton = ShakingImageButton(skin, "slots")
+        val slotsButton = ShakingImageButton(widgetSkin, "slots")
+        slotsButton.setOrigin(iconSize / 2f, iconSize / 2f)
         slotsButton.addListener(object : ClickListener() {
             override fun clicked(event: InputEvent, x: Float, y: Float) {
                 super.clicked(event, x, y)
@@ -27,9 +34,10 @@ class QuickActionsTable(skin: Skin) : Table() {
                 game.screen = SlotsMinigameScreen()
             }
         })
-        add(slotsButton).height(64f).width(64f).padRight(8f)
+        val slotsCell = add(slotsButton).size(iconSize).padRight(8f)
 
-        val quitButton = ShakingImageButton(skin, "exit")
+        val quitButton = ShakingImageButton(widgetSkin, "exit")
+        quitButton.setOrigin(iconSize / 2f, iconSize / 2f)
         quitButton.addListener(object : ClickListener() {
             override fun clicked(event: InputEvent, x: Float, y: Float) {
                 super.clicked(event, x, y)
@@ -37,11 +45,18 @@ class QuickActionsTable(skin: Skin) : Table() {
                 game.screen = MenuScreen()
             }
         })
-        add(quitButton).height(64f).width(64f)
+        val quitCell = add(quitButton).size(iconSize)
+
+        if (OsUtils.isMobile) {
+            slotsCell.expandX()
+            quitCell.expandX()
+        }
     }
 
     override fun draw(batch: Batch?, parentAlpha: Float) {
         super.draw(batch, parentAlpha)
+
+        if (OsUtils.isMobile) return
 
         // i'm not sure how much does it affect on performance
         setX(Gdx.graphics.width - 36f * 2f, Align.left)

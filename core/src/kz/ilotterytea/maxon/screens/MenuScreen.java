@@ -76,6 +76,8 @@ public class MenuScreen implements Screen {
         soundVolume = game.prefs.getInteger("sfx", 10) / 10f;
 
         // - - - - - -  U I  - - - - - -
+        float iconSize = OsUtils.isMobile ? 256f : 64f;
+
         Table menuTable = new Table();
         menuTable.setFillParent(true);
 
@@ -173,6 +175,7 @@ public class MenuScreen implements Screen {
         leftGameControlTable.align(Align.left);
 
         ShakingImageButton quitButton = new ShakingImageButton(widgetSkin, "exit");
+        quitButton.setOrigin(iconSize / 2f, iconSize / 2f);
 
         quitButton.addListener(new ClickListener() {
             @Override
@@ -183,7 +186,7 @@ public class MenuScreen implements Screen {
             }
         });
 
-        leftGameControlTable.add(quitButton).padRight(12f);
+        leftGameControlTable.add(quitButton).size(iconSize).padRight(12f);
 
         // Right part of menu control
         Table rightGameControlTable = new Table();
@@ -197,6 +200,7 @@ public class MenuScreen implements Screen {
         String[] fh4Locale = game.getLocale().getHandle().nameWithoutExtension().split("_");
         String localeButtonStyleName = "locale_" + fh4Locale[0];
         ShakingImageButton localeButton = new ShakingImageButton(widgetSkin, localeButtonStyleName);
+        localeButton.setOrigin(iconSize / 2f, iconSize / 2f);
 
         localeButton.addListener(new ClickListener() {
             @Override
@@ -236,6 +240,7 @@ public class MenuScreen implements Screen {
         }
 
         ShakingImageButton musicButton = new ShakingImageButton(widgetSkin, musicButtonStyleName);
+        musicButton.setOrigin(iconSize / 2f, iconSize / 2f);
         musicButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -266,8 +271,8 @@ public class MenuScreen implements Screen {
         });
 
         if (!OsUtils.isMobile) {
-            rightGameControlTable.add(localeButton).padRight(16f);
-            rightGameControlTable.add(musicButton).padRight(16f);
+            rightGameControlTable.add(localeButton).size(iconSize).padRight(16f);
+            rightGameControlTable.add(musicButton).size(iconSize).padRight(16f);
 
             // Resolution button
             String resolutionButtonStyleName;
@@ -279,6 +284,7 @@ public class MenuScreen implements Screen {
             }
 
             ShakingImageButton resolutionButton = new ShakingImageButton(widgetSkin, resolutionButtonStyleName);
+            resolutionButton.setOrigin(iconSize / 2f, iconSize / 2f);
             resolutionButton.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
@@ -301,12 +307,12 @@ public class MenuScreen implements Screen {
                     clickSound.play(soundVolume);
                 }
             });
-            rightGameControlTable.add(resolutionButton);
+            rightGameControlTable.add(resolutionButton).size(iconSize);
 
             controlTable.add(leftGameControlTable).grow();
         } else {
-            rightGameControlTable.add(localeButton).expand();
-            rightGameControlTable.add(musicButton).expand();
+            rightGameControlTable.add(localeButton).size(iconSize).expand();
+            rightGameControlTable.add(musicButton).size(iconSize).expand();
         }
 
         controlTable.add(rightGameControlTable).grow();
@@ -530,6 +536,8 @@ public class MenuScreen implements Screen {
     }
 
     private void openCredits() {
+        String labelStyleName = OsUtils.isMobile ? "defaultMobile" : "default";
+
         Image bgTint = new Image(uiSkin, "halftransparentblack");
         bgTint.setFillParent(true);
         stage.addActor(bgTint);
@@ -559,11 +567,11 @@ public class MenuScreen implements Screen {
         window.add(titleTable).growX().row();
 
         // Title
-        Label titleLabel = new Label(game.getLocale().getLine(LineId.CreditsTitle), uiSkin);
+        Label titleLabel = new Label(game.getLocale().getLine(LineId.CreditsTitle), uiSkin, labelStyleName);
         titleTable.add(titleLabel).pad(8f, 16f, 8f, 16f).growX();
 
         // Close button
-        TextButton closeButton = new TextButton(" X ", uiSkin);
+        TextButton closeButton = new TextButton(" X ", uiSkin, labelStyleName);
         closeButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -601,13 +609,13 @@ public class MenuScreen implements Screen {
             contributorTable.add(widget).padBottom(16f);
 
             // Name
-            Label name = new Label(contributor.getFirst(), uiSkin, "credits_name");
+            Label name = new Label(contributor.getFirst(), uiSkin, OsUtils.isMobile ? "credits_name_mobile" : "credits_name");
             name.setAlignment(Align.center);
             widget.add(name).grow().padBottom(8f).row();
 
             // Icon
             Image icon = new Image(friendSkin.getDrawable(contributor.getFirst()));
-            widget.add(icon).padBottom(8f).row();
+            widget.add(icon).size(OsUtils.isMobile ? 128f : 64f).padBottom(8f).row();
 
             // Role
             LineId id = switch (contributor.getThird()) {
@@ -620,7 +628,7 @@ public class MenuScreen implements Screen {
                 default -> LineId.CreditsMaxon;
             };
 
-            Label role = new Label(game.getLocale().getLine(id), uiSkin, "credits_role");
+            Label role = new Label(game.getLocale().getLine(id), uiSkin, OsUtils.isMobile ? "credits_role_mobile" : "credits_role");
             role.setAlignment(Align.center);
             widget.add(role).grow().row();
 
@@ -632,7 +640,7 @@ public class MenuScreen implements Screen {
         engineCredits.setBackground("bg2");
         window.add(engineCredits).growX().row();
 
-        Label engineLabel = new Label("Made with", uiSkin);
+        Label engineLabel = new Label("Made with", uiSkin, labelStyleName);
         engineCredits.add(engineLabel).padRight(16f);
 
         TextureAtlas brandAtlas = game.assetManager.get("sprites/gui/brand.atlas");
@@ -645,6 +653,6 @@ public class MenuScreen implements Screen {
                 clickSound.play(soundVolume);
             }
         });
-        engineCredits.add(engineImage).height(32f).width(180f);
+        engineCredits.add(engineImage).height(OsUtils.isMobile ? 64f : 32f).width(OsUtils.isMobile ? 360f : 180f);
     }
 }

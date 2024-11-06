@@ -13,6 +13,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import kz.ilotterytea.maxon.MaxonGame;
@@ -341,7 +342,13 @@ public class GameScreen implements Screen, InputProcessor {
         DebugWidget debugWidget = new DebugWidget(uiSkin);
         this.stage.addActor(debugWidget);
 
-        this.stage.addActor(new QuickActionsTable(this.game.assetManager.get("sprites/gui/widgets.skin", Skin.class)));
+        QuickActionsTable quickActionsTable = new QuickActionsTable(this.game.assetManager.get("sprites/gui/widgets.skin", Skin.class), uiSkin);
+        if (OsUtils.isMobile) {
+            quickActionsTable.setFillParent(true);
+            quickActionsTable.align(Align.bottom);
+        }
+
+        this.stage.addActor(quickActionsTable);
     }
 
     @Override

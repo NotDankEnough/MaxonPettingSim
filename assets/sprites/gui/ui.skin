@@ -97,6 +97,10 @@
     credits: {
       file: fnt/FontText.fnt,
       scaledSize: 16
+    },
+    credits_mobile: {
+      file: fnt/FontText.fnt,
+      scaledSize: 32
     }
   },
   com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle: {
@@ -213,10 +217,18 @@
       font: credits,
       fontColor: white
     },
+    credits_name_mobile: {
+      parent: credits_name,
+      font: credits_mobile,
+    },
     credits_role: {
       font: credits,
       fontColor: yellow
-    }
+    },
+    credits_role_mobile: {
+      parent: credits_role,
+      font: credits_mobile,
+    },
   },
   com.badlogic.gdx.scenes.scene2d.ui.TextField$TextFieldStyle: {
     default: {
