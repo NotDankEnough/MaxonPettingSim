@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.utils.Align
 import kz.ilotterytea.maxon.MaxonGame
+import kz.ilotterytea.maxon.constants.SettingsConstants
 import kz.ilotterytea.maxon.screens.MenuScreen
 import kz.ilotterytea.maxon.screens.SlotsMinigameScreen
 import kz.ilotterytea.maxon.ui.ShakingImageButton
@@ -23,7 +24,7 @@ class QuickActionsTable(widgetSkin: Skin, uiSkin: Skin) : Table(uiSkin) {
             256f
         } else {
             64f
-        }
+        } * game.prefs.getFloat("guiScale", SettingsConstants.UI_DEFAULT_SCALE)
 
         val slotsButton = ShakingImageButton(widgetSkin, "slots")
         slotsButton.setOrigin(iconSize / 2f, iconSize / 2f)

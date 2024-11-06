@@ -23,6 +23,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import kz.ilotterytea.javaextra.tuples.Triple;
 import kz.ilotterytea.maxon.MaxonConstants;
 import kz.ilotterytea.maxon.MaxonGame;
+import kz.ilotterytea.maxon.constants.SettingsConstants;
 import kz.ilotterytea.maxon.localization.LineId;
 import kz.ilotterytea.maxon.localization.LocalizationManager;
 import kz.ilotterytea.maxon.player.Savegame;
@@ -76,7 +77,7 @@ public class MenuScreen implements Screen {
         soundVolume = game.prefs.getInteger("sfx", 10) / 10f;
 
         // - - - - - -  U I  - - - - - -
-        float iconSize = OsUtils.isMobile ? 256f : 64f;
+        float iconSize = (OsUtils.isMobile ? 256f : 64f) * game.prefs.getFloat("guiScale", SettingsConstants.UI_DEFAULT_SCALE);
 
         Table menuTable = new Table();
         menuTable.setFillParent(true);
@@ -270,49 +271,62 @@ public class MenuScreen implements Screen {
             }
         });
 
+        // Resolution button
+        String resolutionButtonStyleName;
+
+        if (game.prefs.getBoolean("fullscreen")) {
+            resolutionButtonStyleName = "windowed";
+        } else {
+            resolutionButtonStyleName = "fullscreen";
+        }
+
+        ShakingImageButton resolutionButton = new ShakingImageButton(widgetSkin, resolutionButtonStyleName);
+        resolutionButton.setOrigin(iconSize / 2f, iconSize / 2f);
+        resolutionButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                super.clicked(event, x, y);
+                if (OsUtils.isMobile) {
+                    float scale = game.prefs.getFloat("guiScale", SettingsConstants.UI_DEFAULT_SCALE);
+
+                    if (scale + 0.5f > SettingsConstants.UI_MAX_SCALE || scale <= 0) {
+                        scale = 0;
+                    }
+
+                    game.prefs.putFloat("guiScale", scale + 0.5f);
+                    game.prefs.flush();
+                    game.setScreen(new SplashScreen());
+                    return;
+                }
+
+                String style;
+
+                if (game.prefs.getBoolean("fullscreen")) {
+                    style = "fullscreen";
+                    Gdx.graphics.setWindowedMode(game.prefs.getInteger("width", 800), game.prefs.getInteger("height", 600));
+                } else {
+                    style = "windowed";
+                    Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
+                }
+
+                game.prefs.putBoolean("fullscreen", !game.prefs.getBoolean("fullscreen"));
+                game.prefs.flush();
+
+                resolutionButton.setDrawable(widgetSkin, style);
+                clickSound.play(soundVolume);
+            }
+        });
+
         if (!OsUtils.isMobile) {
             rightGameControlTable.add(localeButton).size(iconSize).padRight(16f);
             rightGameControlTable.add(musicButton).size(iconSize).padRight(16f);
-
-            // Resolution button
-            String resolutionButtonStyleName;
-
-            if (game.prefs.getBoolean("fullscreen")) {
-                resolutionButtonStyleName = "windowed";
-            } else {
-                resolutionButtonStyleName = "fullscreen";
-            }
-
-            ShakingImageButton resolutionButton = new ShakingImageButton(widgetSkin, resolutionButtonStyleName);
-            resolutionButton.setOrigin(iconSize / 2f, iconSize / 2f);
-            resolutionButton.addListener(new ClickListener() {
-                @Override
-                public void clicked(InputEvent event, float x, float y) {
-                    super.clicked(event, x, y);
-
-                    String style;
-
-                    if (game.prefs.getBoolean("fullscreen")) {
-                        style = "fullscreen";
-                        Gdx.graphics.setWindowedMode(game.prefs.getInteger("width", 800), game.prefs.getInteger("height", 600));
-                    } else {
-                        style = "windowed";
-                        Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
-                    }
-
-                    game.prefs.putBoolean("fullscreen", !game.prefs.getBoolean("fullscreen"));
-                    game.prefs.flush();
-
-                    resolutionButton.setDrawable(widgetSkin, style);
-                    clickSound.play(soundVolume);
-                }
-            });
             rightGameControlTable.add(resolutionButton).size(iconSize);
 
             controlTable.add(leftGameControlTable).grow();
         } else {
             rightGameControlTable.add(localeButton).size(iconSize).expand();
             rightGameControlTable.add(musicButton).size(iconSize).expand();
+            rightGameControlTable.add(resolutionButton).size(iconSize).expand();
         }
 
         controlTable.add(rightGameControlTable).grow();
