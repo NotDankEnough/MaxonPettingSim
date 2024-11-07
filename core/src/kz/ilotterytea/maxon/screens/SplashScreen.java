@@ -37,7 +37,15 @@ public class SplashScreen implements Screen {
     @Override public void show() {
         this.game = MaxonGame.getInstance();
 
-        this.stage = new Stage(new FitViewport(800, 600));
+        Viewport viewport;
+
+        if (OsUtils.isMobile) {
+            viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        } else {
+            viewport = new FitViewport(800, 600);
+        }
+
+        this.stage = new Stage(viewport);
         Skin skin = new Skin(Gdx.files.internal("sprites/gui/ui.skin"));
 
         Table logoTable = new Table();
