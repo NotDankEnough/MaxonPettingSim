@@ -20,7 +20,7 @@
 
   "giftbox.open": "Ты получил",
 
-  "minigame.slots.nothing": "ТЫ НИЧЕГО НЕ ВЫИГРАЛ",
+  "minigame.slots.nothing": "ПОЧТИ ВЫИГРАЛ...",
   "minigame.slots.prize": "ТЫ ВЫИГРАЛ %s P$",
   "minigame.slots.bet": "СТАВКА",
   "minigame.slots.spin_button": "КРУТАНУТЬ",
