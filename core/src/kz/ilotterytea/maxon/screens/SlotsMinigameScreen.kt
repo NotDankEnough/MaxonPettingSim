@@ -461,5 +461,8 @@ class SlotsMinigameScreen : Screen {
         multiplierTask.cancel()
         stage.dispose()
         audioLoop.stop()
+
+        Gdx.input.setOnscreenKeyboardVisible(false)
+        Gdx.input.inputProcessor = null
     }
 }
