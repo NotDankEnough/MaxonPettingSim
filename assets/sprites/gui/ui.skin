@@ -213,6 +213,10 @@
       font: slots,
       fontColor: white
     },
+    slotsMobile: {
+      parent: slots,
+      font: defaultMobile
+    },
     credits_name: {
       font: credits,
       fontColor: white
@@ -235,6 +239,10 @@
       font: default,
       fontColor: white,
       background: button_disabled
+    },
+    defaultMobile: {
+      parent: default,
+      font: defaultMobile
     }
   },
   com.badlogic.gdx.scenes.scene2d.ui.TextTooltip$TextTooltipStyle: {

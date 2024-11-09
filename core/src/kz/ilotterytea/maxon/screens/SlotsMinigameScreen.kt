@@ -22,11 +22,14 @@ import com.badlogic.gdx.utils.Align
 import com.badlogic.gdx.utils.Timer
 import com.badlogic.gdx.utils.Timer.Task
 import com.badlogic.gdx.utils.viewport.FitViewport
+import com.badlogic.gdx.utils.viewport.ScreenViewport
 import kz.ilotterytea.maxon.MaxonGame
+import kz.ilotterytea.maxon.constants.SettingsConstants
 import kz.ilotterytea.maxon.localization.LineId
 import kz.ilotterytea.maxon.player.Savegame
 import kz.ilotterytea.maxon.screens.game.GameScreen
 import kz.ilotterytea.maxon.tasks.MultiplierTask
+import kz.ilotterytea.maxon.utils.OsUtils
 import kz.ilotterytea.maxon.utils.formatters.NumberFormatter
 import kotlin.math.roundToInt
 import kotlin.math.roundToLong
@@ -52,7 +55,11 @@ class SlotsMinigameScreen : Screen {
     private val savegame = Savegame.getInstance()
 
     private val game = MaxonGame.getInstance()
-    private val stage = Stage(FitViewport(800f, 600f))
+    private val stage = Stage(if (OsUtils.isMobile) {
+        ScreenViewport()
+    } else {
+        FitViewport(800f, 600f)
+    })
 
     private var spinButton: TextButton? = null
     private var exitButton: TextButton? = null
@@ -90,16 +97,22 @@ class SlotsMinigameScreen : Screen {
         table.setFillParent(true)
         table.align(Align.center)
 
+        if (OsUtils.isMobile) table.pad(64f)
+
         stage.addActor(table)
 
         // Background
-        val background = Image(game.assetManager.get("sprites/minigames/slots/background.png", Texture::class.java))
-        background.zIndex = 2
+        if (OsUtils.isPC) {
+            val background = Image(game.assetManager.get("sprites/minigames/slots/background.png", Texture::class.java))
+            background.zIndex = 2
 
-        table.add(background)
+            table.add(background)
+        }
+
+        var styleName = if (OsUtils.isMobile) "defaultMobile" else "default"
 
         // Buttons
-        spinButton = TextButton(game.locale.getLine(LineId.MinigameSlotsSpinbutton), skin)
+        spinButton = TextButton(game.locale.getLine(LineId.MinigameSlotsSpinbutton), skin, styleName)
         spinButton?.isDisabled = true
         spinButton?.width = 420f
         spinButton?.setPosition(62f, 60f)
@@ -110,9 +123,8 @@ class SlotsMinigameScreen : Screen {
                 restart()
             }
         })
-        stage.addActor(spinButton)
 
-        exitButton = TextButton(game.locale.getLine(LineId.MinigameSlotsExitbutton), skin)
+        exitButton = TextButton(game.locale.getLine(LineId.MinigameSlotsExitbutton), skin, styleName)
         exitButton?.setPosition(62f, stage.height / 2f - 150f)
         exitButton?.addListener(object : ClickListener() {
             override fun clicked(event: InputEvent?, x: Float, y: Float) {
@@ -122,30 +134,26 @@ class SlotsMinigameScreen : Screen {
             }
         })
 
-        stage.addActor(exitButton)
-
         // Labels
-        prizeLabel = Label("", skin, "slots")
+        styleName = if (OsUtils.isMobile) "slotsMobile" else "slots"
+
+        prizeLabel = Label("", skin, styleName)
         prizeLabel?.setAlignment(Align.center)
         prizeLabel?.setPosition(stage.width / 2f - 180f, stage.height / 2f + 80f)
-        stage.addActor(prizeLabel)
 
         val moneyIcon = Image(game.assetManager.get("sprites/gui/player_icons.atlas", TextureAtlas::class.java).findRegion("points"))
         moneyIcon.setSize(20f, 20f)
         moneyIcon.setPosition(stage.width / 2f + 60f, stage.height / 2f - 180f)
-        stage.addActor(moneyIcon)
 
-        moneyLabel = Label(NumberFormatter.format(savegame.money), skin, "slots")
+        moneyLabel = Label(NumberFormatter.format(savegame.money), skin, styleName)
         moneyLabel?.setAlignment(Align.right)
         moneyLabel?.setPosition(stage.width / 2f, stage.height / 2f - 180f)
-        stage.addActor(moneyLabel)
 
-        val stakeLabel = Label(game.locale.getLine(LineId.MinigameSlotsBet), skin, "slots")
+        val stakeLabel = Label(game.locale.getLine(LineId.MinigameSlotsBet), skin, styleName)
         stakeLabel.setAlignment(Align.center)
         stakeLabel.setPosition(stage.width / 2f - 40f, stage.height / 2f - 100f)
-        stage.addActor(stakeLabel)
 
-        stakeField = TextField("", skin)
+        stakeField = TextField("", skin, if (OsUtils.isMobile) "defaultMobile" else "default")
         stakeField?.messageText = "---"
         stakeField?.setTextFieldFilter { _, c -> c.toString().matches(Regex("^[0-9]*\$")) }
         stakeField?.addListener(object : ChangeListener() {
@@ -169,13 +177,12 @@ class SlotsMinigameScreen : Screen {
         })
         stakeField?.setPosition(stage.width / 2f - 70f, stage.height / 2f - 150f)
 
-        stage.addActor(stakeField)
-
         // Slot columns
-        columns.x = 62f
-        columns.y = stage.height / 2f
-        columns.width = 424f
-        stage.addActor(columns)
+        if (OsUtils.isPC) {
+            columns.x = 62f
+            columns.y = stage.height / 2f
+            columns.width = 424f
+        }
 
         for (i in 0..2) {
             columnSlots.add(Slot.values()[Random.nextInt(0, Slot.values().size)])
@@ -213,12 +220,51 @@ class SlotsMinigameScreen : Screen {
 
         Timer.schedule(multiplierTask, 0.1f, 0.1f)
 
+        if (OsUtils.isMobile) {
+            val title = Image(game.assetManager.get("sprites/minigames/slots/title.png", Texture::class.java))
+            table.add(title).growX().height(title.height * (this.stage.width - 64f) / title.width).padBottom(64f).row()
+
+            table.add(prizeLabel).expandX().padBottom(64f).row()
+
+            table.add(columns).growX().padBottom(64f).row()
+            columns.align(Align.center)
+
+            table.add(stakeLabel).growX().padBottom(32f).row()
+            stakeLabel.setAlignment(Align.right)
+
+            val table2 = Table()
+            table2.add(exitButton).align(Align.left).expandX()
+            table2.add(stakeField).align(Align.right).minWidth(300f)
+            table.add(table2).growX().padBottom(32f).row()
+
+            val table3 = Table()
+            table3.align(Align.right)
+            table3.add(moneyLabel).padRight(16f)
+            table3.add(moneyIcon)
+            table.add(table3).growX().padBottom(64f).row()
+
+            table.add(spinButton).growX()
+        } else {
+            stage.addActor(spinButton)
+            stage.addActor(exitButton)
+            stage.addActor(prizeLabel)
+            stage.addActor(moneyIcon)
+            stage.addActor(moneyLabel)
+            stage.addActor(stakeLabel)
+            stage.addActor(stakeField)
+            stage.addActor(columns)
+        }
+
         Gdx.input.inputProcessor = stage
     }
 
     override fun render(delta: Float) {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT or GL20.GL_DEPTH_BUFFER_BIT)
-        Gdx.gl.glClearColor(0f, 0f, 0f, 1f)
+        if (OsUtils.isMobile) {
+            Gdx.gl.glClearColor(0.12f, 0.12f, 0.15f, 1f)
+        } else {
+            Gdx.gl.glClearColor(0f, 0f, 0f, 1f)
+        }
 
         stage.act(delta)
         stage.draw()
@@ -254,10 +300,12 @@ class SlotsMinigameScreen : Screen {
         columnSlots.clear()
         columns.clear()
 
+        val size = (if (OsUtils.isMobile) 300f else 100f) * game.prefs.getFloat("guiScale", SettingsConstants.UI_DEFAULT_SCALE)
+
         for (x in array) {
             columnSlots.add(x)
             columns.add(SlotImage(x, game.assetManager))
-                .size(100f, 100f)
+                .size(size, size)
                 .expandX()
         }
     }
