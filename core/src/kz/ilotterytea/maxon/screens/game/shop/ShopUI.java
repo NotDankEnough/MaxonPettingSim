@@ -208,16 +208,18 @@ public class ShopUI {
 
         controlTable.add(modeTable).padRight(5f).grow();
 
+        float size = OsUtils.isMobile ? 100f : 64f;
+
         // Multiplier changer
         Table multiplierTable = new Table();
         multiplierTable.align(Align.left);
 
         TextButton x1Button = new TextButton(MaxonGame.getInstance().getLocale().getLine(LineId.StoreX1), this.skin, styleName);
         x1Button.setDisabled(true);
-        multiplierTable.add(x1Button).width(64f).height(64f).padRight(10f);
+        multiplierTable.add(x1Button).width(size).height(size).padRight(10f);
 
         TextButton x10Button = new TextButton(MaxonGame.getInstance().getLocale().getLine(LineId.StoreX10), this.skin, styleName);
-        multiplierTable.add(x10Button).width(64f).height(64f);
+        multiplierTable.add(x10Button).width(size).height(size);
 
         x1Button.addListener(new ClickListener() {
             @Override
