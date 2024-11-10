@@ -13,6 +13,7 @@ import com.badlogic.gdx.math.collision.Ray;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.Timer;
 import kz.ilotterytea.maxon.MaxonGame;
+import kz.ilotterytea.maxon.constants.SettingsConstants;
 import kz.ilotterytea.maxon.utils.OsUtils;
 
 import java.util.ArrayList;
@@ -88,7 +89,7 @@ public class DecalPlayer implements Disposable {
         savegame.increaseMoney(1);
 
         Sound sound = MaxonGame.getInstance().assetManager.get("sfx/player/purr.ogg", Sound.class);
-        sound.play();
+        sound.play(MaxonGame.getInstance().prefs.getInteger(SettingsConstants.SFX_NAME, 10) / 10f);
 
         clickStreak++;
     }
