@@ -8,7 +8,6 @@ buildscript {
     }
     dependencies {
         classpath "com.android.tools.build:gradle:$gradleVersion"
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinGradlePluginVersion"
     }
 }
 
@@ -42,7 +41,7 @@ allprojects {
 }
 
 project(":desktop") {
-    apply plugin: "kotlin"
+    apply plugin: "java-library"
 
     dependencies {
         implementation project(":core")
@@ -53,7 +52,6 @@ project(":desktop") {
 
 project(":android") {
     apply plugin: "android"
-    apply plugin: "kotlin-android"
 
     configurations { natives }
 
@@ -64,13 +62,12 @@ project(":android") {
         natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-arm64-v8a"
         natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-x86"
         natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-x86_64"
-        api "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
         implementation "androidx.core:core:$androidXVersion"
     }
 }
 
 project(":core") {
-    apply plugin: "kotlin"
+    apply plugin: "java-library"
 
     dependencies {
         api "com.badlogicgames.gdx:gdx:$gdxVersion"
@@ -78,8 +75,6 @@ project(":core") {
         api "com.github.mgsx-dev.gdx-gltf:gltf:$gltfVersion"
         implementation "com.google.code.gson:gson:$gsonVersion"
         implementation "ch.qos.logback:logback-classic:$logbackVersion"
-        implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
-        implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
         implementation "com.github.JnCrMx:discord-game-sdk4j:$discordSdkVersion"
     }
 
