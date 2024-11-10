@@ -23,7 +23,7 @@ public class QuickActionsTable extends Table {
         MaxonGame game = MaxonGame.getInstance();
 
         Sound clickSound = game.assetManager.get("sfx/ui/click.ogg");
-        float soundVolume = game.prefs.getInteger("sfx", 10) / 10f;
+        float soundVolume = game.prefs.getInteger(SettingsConstants.SFX_NAME, 10) / 10f;
 
         float iconSize = (OsUtils.isMobile ? 256f : 64f)
         * game.prefs.getFloat("guiScale", SettingsConstants.UI_DEFAULT_SCALE);

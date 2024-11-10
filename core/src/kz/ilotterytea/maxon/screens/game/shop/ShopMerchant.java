@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import kz.ilotterytea.maxon.MaxonGame;
 import kz.ilotterytea.maxon.anim.SpriteUtils;
+import kz.ilotterytea.maxon.constants.SettingsConstants;
 import kz.ilotterytea.maxon.ui.AnimatedImage;
 import kz.ilotterytea.maxon.utils.OsUtils;
 
@@ -51,7 +52,7 @@ public class ShopMerchant extends Stack {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
-                sound.play(game.prefs.getInteger("sfx", 10) / 10f);
+                sound.play(game.prefs.getInteger(SettingsConstants.SFX_NAME, 10) / 10f);
             }
         });
     }

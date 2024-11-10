@@ -74,7 +74,7 @@ public class MenuScreen implements Screen {
         menuMusic.setLooping(true);
 
         clickSound = game.assetManager.get("sfx/ui/click.ogg", Sound.class);
-        soundVolume = game.prefs.getInteger("sfx", 10) / 10f;
+        soundVolume = game.prefs.getInteger(SettingsConstants.SFX_NAME, 10) / 10f;
 
         // - - - - - -  U I  - - - - - -
         float iconSize = (OsUtils.isMobile ? 256f : 64f) * game.prefs.getFloat("guiScale", SettingsConstants.UI_DEFAULT_SCALE);
@@ -230,10 +230,10 @@ public class MenuScreen implements Screen {
         });
 
         // Music button
-        menuMusic.setVolume(game.prefs.getInteger("music", 10) / 10f);
+        menuMusic.setVolume(game.prefs.getInteger(SettingsConstants.MUSIC_NAME, 10) / 10f);
         String musicButtonStyleName;
 
-        if (OsUtils.isPC || game.prefs.getInteger("music", 10) > 0) {
+        if (OsUtils.isPC || game.prefs.getInteger(SettingsConstants.MUSIC_NAME, 10) > 0) {
             musicButtonStyleName = "music_on";
             menuMusic.play();
         } else {
@@ -253,7 +253,7 @@ public class MenuScreen implements Screen {
                 }
 
                 String style;
-                int v = game.prefs.getInteger("music", 10);
+                int v = game.prefs.getInteger(SettingsConstants.MUSIC_NAME, 10);
 
                 if (v > 0) {
                     style = "music_off";
@@ -263,7 +263,7 @@ public class MenuScreen implements Screen {
                     menuMusic.play();
                 }
 
-                game.prefs.putInteger("music", game.prefs.getInteger("music", 10) > 0 ? 0 : 10);
+                game.prefs.putInteger(SettingsConstants.MUSIC_NAME, game.prefs.getInteger(SettingsConstants.MUSIC_NAME, 10) > 0 ? 0 : 10);
                 game.prefs.flush();
 
                 musicButton.setDrawable(widgetSkin, style);
@@ -516,7 +516,7 @@ public class MenuScreen implements Screen {
                 public void changed(ChangeEvent event, Actor actor) {
                     if (actor instanceof Slider s) {
                         int v = (int) s.getValue();
-                        game.prefs.putInteger(sliderName, v);
+                        game.prefs.putInteger(sliderName + "Volume", v);
                         game.prefs.flush();
 
                         switch (sliderName) {
@@ -535,7 +535,7 @@ public class MenuScreen implements Screen {
                 }
             });
 
-            int value = game.prefs.getInteger(sliderName, 10);
+            int value = game.prefs.getInteger(sliderName + "Volume", 10);
 
             if (value > 10) value = 10;
             else if (value < 0) value = 0;

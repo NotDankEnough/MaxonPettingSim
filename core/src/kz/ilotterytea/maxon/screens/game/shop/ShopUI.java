@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import kz.ilotterytea.maxon.MaxonGame;
+import kz.ilotterytea.maxon.constants.SettingsConstants;
 import kz.ilotterytea.maxon.localization.LineId;
 import kz.ilotterytea.maxon.pets.Pet;
 import kz.ilotterytea.maxon.pets.PetWidget;
@@ -51,7 +52,7 @@ public class ShopUI {
         this.notEnoughMoneySound = game.assetManager.get("sfx/shop/not_enough_money.ogg", Sound.class);
         this.purchaseSound = game.assetManager.get("sfx/shop/purchase.ogg", Sound.class);
         this.sellSound = game.assetManager.get("sfx/shop/sell.ogg", Sound.class);
-        this.soundVolume = game.prefs.getInteger("sfx", 10) / 10f;
+        this.soundVolume = game.prefs.getInteger(SettingsConstants.SFX_NAME, 10) / 10f;
 
         this.stageWidth = stage.getWidth();
 

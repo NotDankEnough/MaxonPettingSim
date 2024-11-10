@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Disposable;
 import kz.ilotterytea.maxon.MaxonGame;
+import kz.ilotterytea.maxon.constants.SettingsConstants;
 import kz.ilotterytea.maxon.localization.LineId;
 import kz.ilotterytea.maxon.player.Savegame;
 import kz.ilotterytea.maxon.screens.game.GameScreen;
@@ -37,7 +38,7 @@ public class SavegameWidget extends Table implements Disposable {
         this.stage = stage;
         this.atlas = game.assetManager.get("sprites/gui/player_icons.atlas", TextureAtlas.class);
         this.clickSound = game.assetManager.get("sfx/ui/click.ogg", Sound.class);
-        this.soundVolume = game.prefs.getInteger("sfx", 10) / 10f;
+        this.soundVolume = game.prefs.getInteger(SettingsConstants.SFX_NAME, 10) / 10f;
 
         this.skin = skin;
         this.savegame = savegame;

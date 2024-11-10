@@ -24,6 +24,7 @@ import kz.ilotterytea.javaextra.tuples.Triple;
 import kz.ilotterytea.maxon.MaxonGame;
 import kz.ilotterytea.javaextra.comparators.MapValueKeyComparator;
 import kz.ilotterytea.maxon.anim.SpriteUtils;
+import kz.ilotterytea.maxon.constants.SettingsConstants;
 import kz.ilotterytea.maxon.localization.LineId;
 import kz.ilotterytea.maxon.pets.Pet;
 import kz.ilotterytea.maxon.pets.PetManager;
@@ -96,12 +97,12 @@ public class Giftbox implements Disposable {
             this.openedSound = assetManager.get("sfx/giftbox/giftbox_click.ogg");
         }
 
-        this.soundVolume = MaxonGame.getInstance().prefs.getInteger("sfx", 10) / 10f;
+        this.soundVolume = MaxonGame.getInstance().prefs.getInteger(SettingsConstants.SFX_NAME, 10) / 10f;
 
         this.openedMusic = assetManager.get("mus/giftbox/giftbox_opened.mp3");
         openedMusic.setLooping(true);
 
-        float musicVolume = MaxonGame.getInstance().prefs.getInteger("music", 10) / 10f;
+        float musicVolume = MaxonGame.getInstance().prefs.getInteger(SettingsConstants.MUSIC_NAME, 10) / 10f;
         openedMusic.setVolume(musicVolume);
 
         this.boxPosition = new Vector3(3.3f, 0f, 0.4f);

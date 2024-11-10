@@ -19,6 +19,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import kz.ilotterytea.maxon.MaxonGame;
 import kz.ilotterytea.maxon.anim.SpriteUtils;
 import kz.ilotterytea.maxon.audio.Playlist;
+import kz.ilotterytea.maxon.constants.SettingsConstants;
 import kz.ilotterytea.maxon.inputprocessors.CrossProcessor;
 import kz.ilotterytea.maxon.pets.Pet;
 import kz.ilotterytea.maxon.pets.PetManager;
@@ -91,7 +92,7 @@ public class GameScreen implements Screen, InputProcessor {
                 game.assetManager.get("mus/game/shopping_spree.mp3", Music.class)
         );
         playlist.setShuffleMode(true);
-        playlist.setVolume(game.prefs.getInteger("music", 10) / 10f);
+        playlist.setVolume(game.prefs.getInteger(SettingsConstants.MUSIC_NAME, 10) / 10f);
         playlist.next();
 
         createStageUI();

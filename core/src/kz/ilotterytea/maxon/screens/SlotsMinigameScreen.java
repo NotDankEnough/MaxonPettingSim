@@ -242,8 +242,8 @@ public class SlotsMinigameScreen implements Screen {
 
         audioLoop = game.assetManager.get("mus/minigames/slots/slots_loop.mp3");
         audioLoop.setLooping(true);
-        audioLoop.setVolume(game.prefs.getInteger("music", 10) / 10f);
-        soundVolume = game.prefs.getInteger("sfx", 10) / 10f;
+        audioLoop.setVolume(game.prefs.getInteger(SettingsConstants.MUSIC_NAME, 10) / 10f);
+        soundVolume = game.prefs.getInteger(SettingsConstants.SFX_NAME, 10) / 10f;
 
         Timer.schedule(multiplierTask, 0.1f, 0.1f);
 
