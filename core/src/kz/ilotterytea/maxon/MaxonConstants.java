@@ -17,7 +17,7 @@ public class MaxonConstants {
     public static final String GAME_APP_ID = "maxon";
     public static final String GAME_APP_PACKAGE = "kz.ilotterytea." + GAME_APP_ID;
     public static final String GAME_APP_URL;
-    public static final String GAME_VERSION = "1.0.0";
+    public static final String GAME_VERSION = "1.0.1";
     public static final String GAME_MAIN_DEVELOPER = "ilotterytea";
 
     public static final List<Triple<String, String, Integer>> GAME_DEVELOPERS = Arrays.asList(
