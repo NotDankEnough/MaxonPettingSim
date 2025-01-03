@@ -63,6 +63,7 @@ project(":android") {
         natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-x86"
         natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-x86_64"
         implementation "androidx.core:core:$androidXVersion"
+        implementation "com.google.android.gms:play-services-ads:$playAdsVersion"
     }
 }
 
