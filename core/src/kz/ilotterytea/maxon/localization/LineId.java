@@ -24,6 +24,15 @@ public enum LineId {
     CreditsTester,
     CreditsMoral,
 
+    LoginTitle,
+    LoginUsername,
+    LoginPassword,
+    LoginRegister,
+    LoginSend,
+    LoginProcessing,
+    LoginButton,
+    LoginAuthorised,
+
     GiftboxOpen,
 
     MinigameSlotsSpinbutton,

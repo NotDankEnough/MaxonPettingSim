@@ -1,14 +1,11 @@
 {
   "updater.info": "A new update is available!",
-
   "menu.new_game": "New Game",
   "menu.continue": "CONTINUE",
   "menu.reset": "RESET",
-
   "sounds.title": "Mixer",
   "sounds.music": "Music",
   "sounds.sfx": "SFX",
-
   "credits.title": "Those who contributed",
   "credits.maxon": "Maxon himself",
   "credits.developer": "Developer",
@@ -17,64 +14,54 @@
   "credits.idea": "Idea dispenser",
   "credits.tester": "Tester",
   "credits.moral": "Moral supporter",
-
+  "login.title": "Sign-in(tm) account",
+  "login.username": "Username",
+  "login.password": "Password",
+  "login.register": "Need account?",
+  "login.send": "Login",
+  "login.processing": "Authorising...",
+  "login.button": "Sign in...",
+  "login.authorised": "Logged in as %s",
   "giftbox.open": "You got",
-
   "minigame.slots.nothing": "ALMOST WON...",
   "minigame.slots.prize": "YOU WON %s P$",
   "minigame.slots.bet": "BET",
   "minigame.slots.spin_button": "SPIN",
   "minigame.slots.exit_button": " X ",
-
   "store.title": "Store",
   "store.buy": "Buy",
   "store.sell": "Sell",
   "store.x1": "1x",
   "store.x10": "10x",
   "store.pet_locked": "Pet Maxon more to unlock it...",
-
   "pet.bror.name": "Sleepy Bror",
   "pet.bror.desc": "A falling asleep Bror will help you to pet Maxon almost to besvimers",
-
   "pet.sandwich.name": "The Sandwich Cat",
   "pet.sandwich.desc": "Even though his head is shielded from the light by bread, he can still to pet Maxon by his cheeks.",
-
   "pet.manlooshka.name": "Manlooshka",
   "pet.manlooshka.desc": "rrrrr",
-
   "pet.thirsty.name": "The Thirsty Cat",
   "pet.thirsty.desc": "Every time the kitty drinks water, drops of spilled water fall on the screen and pet Maxon's dry cheeks.",
-
   "pet.furios.name": "The Furios Cat",
   "pet.furios.desc": "Petting FURIOSLY !!!",
-  
   "pet.tvcat.name": "TV cat",
   "pet.tvcat.desc": "just a funny cat playing with tv",
-
   "pet.progcat.name": "Programmer cat",
   "pet.progcat.desc": "Using his programming skills, he developed software to pet Maxon more efficiently.",
-
   "pet.screamcat.name": "Screaming cat",
   "pet.screamcat.desc": "His scream is so loud, that it shakes Maxon's cheeks.",
-
   "pet.hellcat.name": "Hellcat",
   "pet.hellcat.desc": "Petting Maxon with POWER OF HELL.",
-
   "pet.lurker.name": "Lurking cat",
   "pet.lurker.desc": "Finds the best spots to pet Maxon in.",
-
   "pet.piano.name": "Piano cat",
   "pet.piano.desc": "Gives best pettings with his trained paws.",
-
   "pet.bee.name": "Bee cat",
   "pet.bee.desc": "Collects pollen from Maxon's cheeks.",
-
   "pet.busy.name": "Business cat",
   "pet.busy.desc": "Pets Maxon with help of all his influence.",
-
   "pet.aeae.name": "Aeae",
   "pet.aeae.desc": "back and forth, back and forth.",
-
   "pet.succat.name": "Sucking cat",
   "pet.succat.desc": "Maskot. Increases amount of petting with his sucking power."
 }

@@ -1,6 +1,7 @@
 package kz.ilotterytea.maxon.screens;
 
-import com.badlogic.gdx.*;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
@@ -27,7 +28,10 @@ import kz.ilotterytea.maxon.constants.SettingsConstants;
 import kz.ilotterytea.maxon.localization.LineId;
 import kz.ilotterytea.maxon.localization.LocalizationManager;
 import kz.ilotterytea.maxon.player.Savegame;
-import kz.ilotterytea.maxon.ui.*;
+import kz.ilotterytea.maxon.session.SessionClient;
+import kz.ilotterytea.maxon.ui.DebugWidget;
+import kz.ilotterytea.maxon.ui.SavegameWidget;
+import kz.ilotterytea.maxon.ui.ShakingImageButton;
 import kz.ilotterytea.maxon.utils.GameUpdater;
 import kz.ilotterytea.maxon.utils.OsUtils;
 import net.mgsx.gltf.scene3d.attributes.PBRCubemapAttribute;
@@ -38,14 +42,19 @@ import net.mgsx.gltf.scene3d.scene.SceneManager;
 import net.mgsx.gltf.scene3d.scene.SceneSkybox;
 import net.mgsx.gltf.scene3d.utils.EnvironmentUtil;
 import net.mgsx.gltf.scene3d.utils.IBLBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 
 public class MenuScreen implements Screen {
+    private static final Logger log = LoggerFactory.getLogger(MenuScreen.class);
     private MaxonGame game;
 
     private Stage stage;
     private Skin uiSkin;
+    private TextButton loginButton;
+
     private Music menuMusic;
 
     private final Savegame savegame = Savegame.getInstance();
@@ -57,7 +66,8 @@ public class MenuScreen implements Screen {
     private Sound clickSound;
     private float soundVolume;
 
-    @Override public void show() {
+    @Override
+    public void show() {
         this.game = MaxonGame.getInstance();
         game.getDiscordActivityClient().runThread();
 
@@ -317,7 +327,18 @@ public class MenuScreen implements Screen {
             }
         });
 
+        // Login button
+        loginButton = new TextButton(game.getLocale().getLine(LineId.LoginButton), uiSkin);
+        loginButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                super.clicked(event, x, y);
+                showLoginWindow();
+            }
+        });
+
         if (!OsUtils.isMobile) {
+            rightGameControlTable.add(loginButton).padRight(16f);
             rightGameControlTable.add(localeButton).size(iconSize).padRight(16f);
             rightGameControlTable.add(musicButton).size(iconSize).padRight(16f);
             rightGameControlTable.add(resolutionButton).size(iconSize);
@@ -384,6 +405,57 @@ public class MenuScreen implements Screen {
 
         stage.act(delta);
         stage.draw();
+
+        // Login button logic
+        SessionClient session = game.getSessionClient();
+        if (!session.isProcessing() && !session.isAuthorised() && !loginButton.getText().equals(game.getLocale().getLine(LineId.LoginButton))) {
+            loginButton.setText(game.getLocale().getLine(LineId.LoginButton));
+            loginButton.clearListeners();
+            loginButton.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    super.clicked(event, x, y);
+                    showLoginWindow();
+                }
+
+                @Override
+                public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                    super.enter(event, x, y, pointer, fromActor);
+                    loginButton.setColor(new Color(0xffffffff));
+                }
+
+                @Override
+                public void exit(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                    super.exit(event, x, y, pointer, fromActor);
+                    loginButton.setColor(new Color(0xeeeeeeff));
+                }
+            });
+            loginButton.setStyle(uiSkin.get("default", TextButton.TextButtonStyle.class));
+            loginButton.setDisabled(false);
+        } else if (session.isAuthorised() && !loginButton.getText().equals(game.getLocale().getFormattedLine(LineId.LoginAuthorised, session.getUsername()))) {
+            loginButton.setText(game.getLocale().getFormattedLine(LineId.LoginAuthorised, session.getUsername()));
+            loginButton.clearListeners();
+            loginButton.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    super.clicked(event, x, y);
+                    session.invalidateToken();
+                }
+
+                @Override
+                public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                    super.enter(event, x, y, pointer, fromActor);
+                    loginButton.setColor(new Color(0xffaaaaff));
+                }
+
+                @Override
+                public void exit(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                    super.exit(event, x, y, pointer, fromActor);
+                    loginButton.setColor(Color.WHITE);
+                }
+            });
+            loginButton.setDisabled(true);
+        }
     }
 
     @Override
@@ -392,9 +464,16 @@ public class MenuScreen implements Screen {
         sceneManager.updateViewport(width, height);
     }
 
-    @Override public void pause() {}
-    @Override public void resume() {}
-    @Override public void hide() {
+    @Override
+    public void pause() {
+    }
+
+    @Override
+    public void resume() {
+    }
+
+    @Override
+    public void hide() {
         for (Timer.Task task : tasks) {
             task.cancel();
         }
@@ -403,7 +482,9 @@ public class MenuScreen implements Screen {
         menuMusic.stop();
         dispose();
     }
-    @Override public void dispose() {
+
+    @Override
+    public void dispose() {
         stage.dispose();
         sceneManager.dispose();
     }
@@ -668,5 +749,116 @@ public class MenuScreen implements Screen {
             }
         });
         engineCredits.add(engineImage).height(OsUtils.isMobile ? 64f : 32f).width(OsUtils.isMobile ? 360f : 180f);
+    }
+
+    private void showLoginWindow() {
+        Image bgTint = new Image(uiSkin, "halftransparentblack");
+        bgTint.setFillParent(true);
+        stage.addActor(bgTint);
+
+        // Table
+        Table table = new Table();
+        table.setFillParent(true);
+        table.align(Align.center);
+
+        stage.addActor(table);
+
+        // Window
+        Table window = new Table(uiSkin);
+        window.setBackground("bg");
+        window.align(Align.center);
+        table.add(window).size(460f, 400f);
+
+        // Table for title and close button
+        Table titleTable = new Table(uiSkin);
+        titleTable.setBackground("bg2");
+        window.add(titleTable).growX().row();
+
+        // Title
+        Label titleLabel = new Label(game.getLocale().getLine(LineId.LoginTitle), uiSkin);
+        titleTable.add(titleLabel).pad(8f, 16f, 8f, 16f).growX();
+
+        // Close button
+        TextButton closeButton = new TextButton(" X ", uiSkin);
+        closeButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                super.clicked(event, x, y);
+                table.remove();
+                bgTint.remove();
+                clickSound.play(soundVolume);
+            }
+        });
+        titleTable.add(closeButton).pad(8f, 16f, 8f, 16f);
+
+        // Table for fields
+        Table contentTable = new Table();
+        window.add(contentTable).pad(16f).grow().row();
+
+        // Username
+        Label usernameLabel = new Label(game.getLocale().getLine(LineId.LoginUsername), uiSkin);
+        contentTable.add(usernameLabel).grow().row();
+
+        TextField usernameField = new TextField("", uiSkin);
+        usernameField.setMessageText("...");
+        usernameField.setTextFieldFilter((textField, c) -> Character.toString(c).matches("^[a-zA-Z0-9]"));
+        usernameField.setMaxLength(25);
+        contentTable.add(usernameField).padBottom(15f).grow().row();
+
+        // Password
+        Label passwordLabel = new Label(game.getLocale().getLine(LineId.LoginPassword), uiSkin);
+        contentTable.add(passwordLabel).grow().row();
+
+        TextField passwordField = new TextField("", uiSkin);
+        passwordField.setMessageText("...");
+
+        String[] passwords = {"", ""};
+
+        passwordField.setTextFieldListener((textField, c) -> {
+            String hiddenText = passwords[0];
+            String fieldText = passwords[1];
+
+            if (c == 8 && !fieldText.isEmpty() && !hiddenText.isEmpty()) {
+                fieldText = fieldText.substring(0, fieldText.length() - 1);
+                hiddenText = hiddenText.substring(0, hiddenText.length() - 1);
+            } else if (c != 8) {
+                fieldText += '*';
+                hiddenText += c;
+            }
+
+            textField.setText(fieldText);
+            passwords[0] = hiddenText;
+            passwords[1] = fieldText;
+        });
+
+        contentTable.add(passwordField).grow().row();
+
+        // Register button
+        TextButton registerButton = new TextButton(game.getLocale().getLine(LineId.LoginRegister), uiSkin, "link");
+        registerButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                super.clicked(event, x, y);
+                Gdx.net.openURI(MaxonConstants.IDENTITY_REGISTRATION_URL);
+            }
+        });
+        contentTable.add(registerButton).padTop(15f).padBottom(15f).grow().row();
+
+        // Login button
+        TextButton sendButton = new TextButton(game.getLocale().getLine(LineId.LoginSend), uiSkin);
+        sendButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                super.clicked(event, x, y);
+                MaxonGame.getInstance().getSessionClient().authorize(usernameField.getText(), passwords[0]);
+                loginButton.setText(game.getLocale().getLine(LineId.LoginProcessing));
+                loginButton.setDisabled(true);
+                // maybe we could somehow fire the close button instead of cv pasting
+                table.remove();
+                bgTint.remove();
+                clickSound.play(soundVolume);
+            }
+        });
+        contentTable.add(sendButton).grow().row();
     }
 }

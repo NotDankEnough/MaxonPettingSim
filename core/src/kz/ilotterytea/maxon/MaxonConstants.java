@@ -18,6 +18,7 @@ public class MaxonConstants {
     public static final String GAME_APP_PACKAGE = "kz.ilotterytea." + GAME_APP_ID;
     public static final String GAME_APP_URL;
     public static final String GAME_VERSION = "1.0.1";
+    public static final Integer GAME_PROTOCOL = 1;
     public static final String GAME_MAIN_DEVELOPER = "ilotterytea";
 
     public static final List<Triple<String, String, Integer>> GAME_DEVELOPERS = Arrays.asList(
@@ -55,6 +56,12 @@ public class MaxonConstants {
     public static final DecimalFormat DECIMAL_FORMAT2 = new DecimalFormat("###,###");
 
     public static final String GAME_VERSIONS_FILE_URL = "https://assets.ilotterytea.kz/maxon/versions.json";
+    public static final String IDENTITY_BASE_URL = "https://id.ilotterytea.kz";
+    public static final String IDENTITY_INVALIDATE_URL = IDENTITY_BASE_URL + "/invalidate";
+    public static final String IDENTITY_VALIDATE_URL = IDENTITY_BASE_URL + "/validate";
+    public static final String IDENTITY_REFRESH_URL = IDENTITY_BASE_URL + "/refresh";
+    public static final String IDENTITY_AUTHENTICATION_URL = IDENTITY_BASE_URL + "/authenticate";
+    public static final String IDENTITY_REGISTRATION_URL = IDENTITY_BASE_URL;
 
     public static final long DISCORD_APPLICATION_ID = 1051092609659052062L;
 
@@ -68,7 +75,7 @@ public class MaxonConstants {
 
         for (int y = 0; y < checkers; y++) {
             for (int x = 0; x < checkers; x++) {
-                if ((x + y) % 2 == 0){
+                if ((x + y) % 2 == 0) {
                     pixmap.setColor(Color.MAGENTA);
                 } else {
                     pixmap.setColor(Color.BLACK);

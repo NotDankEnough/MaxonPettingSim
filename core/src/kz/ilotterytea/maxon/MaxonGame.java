@@ -8,93 +8,100 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import kz.ilotterytea.maxon.localization.LocalizationManager;
 import kz.ilotterytea.maxon.pets.PetManager;
 import kz.ilotterytea.maxon.screens.SplashScreen;
+import kz.ilotterytea.maxon.session.SessionClient;
 import kz.ilotterytea.maxon.utils.GameUpdater;
 
 public class MaxonGame extends Game {
-	public SpriteBatch batch;
-	public AssetManager assetManager;
-	public Preferences prefs;
+    public SpriteBatch batch;
+    public AssetManager assetManager;
+    public Preferences prefs;
 
-	private LocalizationManager locale;
-	private PetManager petManager;
+    private LocalizationManager locale;
+    private PetManager petManager;
 
-	private DiscordActivityClient discordActivityClient;
+    private DiscordActivityClient discordActivityClient;
+    private SessionClient sessionClient;
 
-	private static MaxonGame instance;
+    private static MaxonGame instance;
 
-	public static MaxonGame getInstance() {
-		if (instance == null) {
-			instance = new MaxonGame();
-		}
-		return instance;
-	}
+    public static MaxonGame getInstance() {
+        if (instance == null) {
+            instance = new MaxonGame();
+        }
+        return instance;
+    }
 
-	public PetManager getPetManager() {
-		return petManager;
-	}
+    public PetManager getPetManager() {
+        return petManager;
+    }
 
-	public DiscordActivityClient getDiscordActivityClient() {
-		return discordActivityClient;
-	}
+    public DiscordActivityClient getDiscordActivityClient() {
+        return discordActivityClient;
+    }
 
-	public LocalizationManager getLocale() {
-		return locale;
-	}
+    public SessionClient getSessionClient() {
+        return sessionClient;
+    }
 
-	public void setLocale(LocalizationManager locale) {
-		this.locale = locale;
-	}
+    public LocalizationManager getLocale() {
+        return locale;
+    }
 
-	@Override
-	public void create () {
-		// Check the latest version
-		new GameUpdater().checkLatestUpdate();
+    public void setLocale(LocalizationManager locale) {
+        this.locale = locale;
+    }
 
-		batch = new SpriteBatch();
-		prefs = Gdx.app.getPreferences(MaxonConstants.GAME_APP_PACKAGE);
-		locale = new LocalizationManager(Gdx.files.internal("i18n/" + prefs.getString("lang", "en_us") + ".json"));
+    @Override
+    public void create() {
+        // Check the latest version
+        new GameUpdater().checkLatestUpdate();
 
-		Gdx.graphics.setVSync(prefs.getBoolean("vsync", true));
+        sessionClient = new SessionClient(Gdx.app.getPreferences("kz.ilotterytea.SigninSession"));
+        batch = new SpriteBatch();
+        prefs = Gdx.app.getPreferences(MaxonConstants.GAME_APP_PACKAGE);
+        locale = new LocalizationManager(Gdx.files.internal("i18n/" + prefs.getString("lang", "en_us") + ".json"));
 
-		if (prefs.getBoolean("fullscreen", false)) {
-			Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
-		} else if (
-				prefs.contains("width") ||
-				prefs.contains("height")
-		) {
-			int width = prefs.getInteger("width", 800);
+        Gdx.graphics.setVSync(prefs.getBoolean("vsync", true));
 
-			if (width < 800) {
-				width = 800;
-				prefs.putInteger("width", width);
-			}
+        if (prefs.getBoolean("fullscreen", false)) {
+            Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
+        } else if (
+                prefs.contains("width") ||
+                        prefs.contains("height")
+        ) {
+            int width = prefs.getInteger("width", 800);
 
-			int height = prefs.getInteger("height", 600);
+            if (width < 800) {
+                width = 800;
+                prefs.putInteger("width", width);
+            }
 
-			if (height < 600) {
-				height = 600;
-				prefs.putInteger("height", height);
-			}
+            int height = prefs.getInteger("height", 600);
 
-			prefs.flush();
-			Gdx.graphics.setWindowedMode(width, height);
-		}
+            if (height < 600) {
+                height = 600;
+                prefs.putInteger("height", height);
+            }
 
-		assetManager = new AssetManager();
-		petManager = new PetManager(assetManager);
+            prefs.flush();
+            Gdx.graphics.setWindowedMode(width, height);
+        }
 
-		discordActivityClient = new DiscordActivityClient();
+        assetManager = new AssetManager();
+        petManager = new PetManager(assetManager);
 
-		this.setScreen(new SplashScreen());
-	}
+        discordActivityClient = new DiscordActivityClient();
 
-	@Override
-	public void dispose () {
-		batch.dispose();
-		for (String name : assetManager.getAssetNames()) {
-			assetManager.unload(name);
-		}
-		assetManager.dispose();
-		discordActivityClient.dispose();
-	}
+        this.setScreen(new SplashScreen());
+    }
+
+    @Override
+    public void dispose() {
+        batch.dispose();
+        for (String name : assetManager.getAssetNames()) {
+            assetManager.unload(name);
+        }
+        assetManager.dispose();
+        discordActivityClient.dispose();
+    }
 }

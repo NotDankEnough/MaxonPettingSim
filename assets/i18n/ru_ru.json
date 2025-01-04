@@ -1,14 +1,11 @@
 {
   "updater.info": "Доступно новое обновление!",
-
   "menu.new_game": "Новая игра",
   "menu.continue": "ПРОДОЛЖИТЬ",
   "menu.reset": "СБРОСИТЬ",
-
   "sounds.title": "Микшер",
   "sounds.music": "Музыка",
   "sounds.sfx": "SFX",
-
   "credits.title": "Те, кто внёс вклад",
   "credits.maxon": "Максон",
   "credits.developer": "Разработчик",
@@ -17,64 +14,54 @@
   "credits.idea": "Раздатчик идей",
   "credits.tester": "Тестер",
   "credits.moral": "Моральная помощь",
-
+  "login.title": "Sign-in(tm) аккаунт",
+  "login.username": "Имя пользователя",
+  "login.password": "Пароль",
+  "login.register": "Нужен аккаунт?",
+  "login.send": "Зайти",
+  "login.processing": "Авторизируюсь...",
+  "login.button": "Вход",
+  "login.authorised": "Зашёл как %s",
   "giftbox.open": "Ты получил",
-
   "minigame.slots.nothing": "ПОЧТИ ВЫИГРАЛ...",
   "minigame.slots.prize": "ТЫ ВЫИГРАЛ %s P$",
   "minigame.slots.bet": "СТАВКА",
   "minigame.slots.spin_button": "КРУТАНУТЬ",
   "minigame.slots.exit_button": " X ",
-
   "store.title": "Магазин",
   "store.buy": "Купить",
   "store.sell": "Продать",
   "store.x1": "1x",
   "store.x10": "10x",
   "store.pet_locked": "Гладь Махона больше, чтобы открыть...",
-
   "pet.bror.name": "Cонный Брор",
   "pet.bror.desc": "Засыпающий Брор поможет тебе гладить Максона практически до потери сознания.",
-
   "pet.sandwich.name": "Кот-бутерброд",
   "pet.sandwich.desc": "Даже, когда его голова накрыта хлебом от солнечного света, он всё ещё может гладить Максона за его щёчки.",
-
   "pet.manlooshka.name": "Манлушка",
   "pet.manlooshka.desc": "*ррррр*",
-
   "pet.thirsty.name": "Жаждущая кошка",
   "pet.thirsty.desc": "Каждый раз, когда он пьёт воду, капли пролитой воды падают на экран и гладят Максона за его сухие щёчки.",
-
   "pet.furios.name": "Яростный кот",
   "pet.furios.desc": "ласкает НЕИСТОВО !!!",
-  
   "pet.tvcat.name": "Телевизионный котик",
   "pet.tvcat.desc": "он сильный",
-
   "pet.progcat.name": "Кот-программист",
   "pet.progcat.desc": "Используя свои навыки программирования, он написал софт для более эффективного поглаживания Максона.",
-
   "pet.screamcat.name": "Кричащий кот",
   "pet.screamcat.desc": "Его крик настолько громкий, что способен содрогать щёчки Максона.",
-
   "pet.hellcat.name": "Адский кот",
   "pet.hellcat.desc": "Ласкает Максона силой ПРЕИСПОДНЕЙ.",
-
   "pet.lurker.name": "Луркающий котик",
   "pet.lurker.desc": "Выявляет самые выгодные места для почесывания Максона.",
-
   "pet.piano.name": "Котик-пианист",
   "pet.piano.desc": "Своими натренированными лапками дарит самые лучшие печесушки.",
-
   "pet.bee.name": "Пчелокот",
   "pet.bee.desc": "Собирает пыльцу с щёчек Максона, попутно поглаживая их.",
-
   "pet.busy.name": "Деловой кот",
   "pet.busy.desc": "Используя все свои бизнес-связи и своих работников, гладит Максона.",
-
   "pet.aeae.name": "Аеае",
   "pet.aeae.desc": "туда-сюда, туда-сюда.",
-
   "pet.succat.name": "Сосущий кот",
   "pet.succat.desc": "Талисман. Своими сосательными навыками увеличивает количество поглаживаний."
 }
