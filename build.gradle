@@ -75,7 +75,9 @@ project(":core") {
         api "de.golfgl.gdxgamesvcs:gdx-gamesvcs-core:$gamesvcsVersion"
         api "com.github.mgsx-dev.gdx-gltf:gltf:$gltfVersion"
         implementation "com.google.code.gson:gson:$gsonVersion"
+        implementation "org.slf4j:slf4j-api:$slf4jVersion"
         implementation "ch.qos.logback:logback-classic:$logbackVersion"
+        implementation "ch.qos.logback:logback-core:$logbackVersion"
         implementation "com.github.JnCrMx:discord-game-sdk4j:$discordSdkVersion"
     }
 
