@@ -9,6 +9,7 @@ import kz.ilotterytea.maxon.localization.LocalizationManager;
 import kz.ilotterytea.maxon.pets.PetManager;
 import kz.ilotterytea.maxon.screens.SplashScreen;
 import kz.ilotterytea.maxon.session.IdentityClient;
+import kz.ilotterytea.maxon.session.SessionClient;
 import kz.ilotterytea.maxon.utils.GameUpdater;
 
 public class MaxonGame extends Game {
@@ -20,7 +21,9 @@ public class MaxonGame extends Game {
     private PetManager petManager;
 
     private DiscordActivityClient discordActivityClient;
+
     private IdentityClient identityClient;
+    private SessionClient sessionClient;
 
     private static MaxonGame instance;
 
@@ -43,6 +46,10 @@ public class MaxonGame extends Game {
         return identityClient;
     }
 
+    public SessionClient getSessionClient() {
+        return sessionClient;
+    }
+
     public LocalizationManager getLocale() {
         return locale;
     }
@@ -57,6 +64,8 @@ public class MaxonGame extends Game {
         new GameUpdater().checkLatestUpdate();
 
         identityClient = new IdentityClient(Gdx.app.getPreferences("kz.ilotterytea.SigninIdentity"));
+        sessionClient = new SessionClient();
+
         batch = new SpriteBatch();
         prefs = Gdx.app.getPreferences(MaxonConstants.GAME_APP_PACKAGE);
         locale = new LocalizationManager(Gdx.files.internal("i18n/" + prefs.getString("lang", "en_us") + ".json"));

@@ -10,6 +10,7 @@ import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.JsonWriter;
 import com.badlogic.gdx.utils.Timer;
 import kz.ilotterytea.maxon.MaxonConstants;
+import kz.ilotterytea.maxon.MaxonGame;
 import kz.ilotterytea.maxon.utils.RandomUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -90,6 +91,8 @@ public class IdentityClient {
                     IdentityClient.this.userId = String.valueOf(json.get("data").get("user").getInt("id"));
                     IdentityClient.this.isAuthorised = true;
                     log.info("Successfully authorised! Welcome back, {}!", IdentityClient.this.username);
+
+                    MaxonGame.getInstance().getSessionClient().connect();
                 } catch (Exception e) {
                     log.error("An exception was thrown while authorising", e);
                 }
@@ -141,6 +144,7 @@ public class IdentityClient {
                         accessToken = null;
                         userId = null;
                         isAuthorised = false;
+                        MaxonGame.getInstance().getSessionClient().close(5001, "Failed to validate token");
                         authorize(username, password);
                         return;
                     }
@@ -213,6 +217,8 @@ public class IdentityClient {
                     sessionPreferences.remove("username");
                     sessionPreferences.remove("password");
                     sessionPreferences.flush();
+
+                    MaxonGame.getInstance().getSessionClient().close(5001, "Invalidated token");
                 } catch (Exception ignored) {
                 }
             }
@@ -262,11 +268,14 @@ public class IdentityClient {
                         userId = null;
                         isAuthorised = false;
                         log.warn(error);
+                        MaxonGame.getInstance().getSessionClient().close(5002, "Failed to refresh token");
                         return;
                     }
 
                     accessToken = json.get("data").get("accessToken").asString();
                     log.info("Token has been refreshed!");
+
+                    MaxonGame.getInstance().getSessionClient().updateIdentity();
                 } catch (Exception e) {
                     log.error("An exception was thrown while refreshing", e);
                 }

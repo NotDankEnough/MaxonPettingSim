@@ -62,6 +62,7 @@ public class MaxonConstants {
     public static final String IDENTITY_REFRESH_URL = IDENTITY_BASE_URL + "/refresh";
     public static final String IDENTITY_AUTHENTICATION_URL = IDENTITY_BASE_URL + "/authenticate";
     public static final String IDENTITY_REGISTRATION_URL = IDENTITY_BASE_URL;
+    public static final String SESSION_WSS_URL = "ws://localhost:31084";
 
     public static final long DISCORD_APPLICATION_ID = 1051092609659052062L;
 
