@@ -67,10 +67,30 @@ project(":android") {
     }
 }
 
+project(":shared") {
+    apply plugin: "java-library"
+
+    dependencies {}
+}
+
+project(":server") {
+    apply plugin: "java-library"
+
+    dependencies {
+        implementation project(":shared")
+        implementation "com.google.code.gson:gson:$gsonVersion"
+        implementation "org.slf4j:slf4j-api:$slf4jVersion"
+        implementation "ch.qos.logback:logback-classic:$logbackVersion"
+        implementation "ch.qos.logback:logback-core:$logbackVersion"
+        implementation "org.java-websocket:Java-WebSocket:$websocketVersion"
+    }
+}
+
 project(":core") {
     apply plugin: "java-library"
 
     dependencies {
+        implementation project(":shared")
         api "com.badlogicgames.gdx:gdx:$gdxVersion"
         api "de.golfgl.gdxgamesvcs:gdx-gamesvcs-core:$gamesvcsVersion"
         api "com.github.mgsx-dev.gdx-gltf:gltf:$gltfVersion"
@@ -79,6 +99,7 @@ project(":core") {
         implementation "ch.qos.logback:logback-classic:$logbackVersion"
         implementation "ch.qos.logback:logback-core:$logbackVersion"
         implementation "com.github.JnCrMx:discord-game-sdk4j:$discordSdkVersion"
+        implementation "org.java-websocket:Java-WebSocket:$websocketVersion"
     }
 
     compileJava.dependsOn writeAllAssetsToFile

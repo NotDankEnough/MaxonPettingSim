@@ -1,0 +1,48 @@
+sourceCompatibility = 17
+sourceSets.main.java.srcDirs = ["src/"]
+
+project.ext.mainClassName = "kz.ilotterytea.maxon.ServerLauncher"
+
+import org.gradle.internal.os.OperatingSystem
+
+tasks.register('run', JavaExec) {
+    dependsOn classes
+    main = project.mainClassName
+    classpath = sourceSets.main.runtimeClasspath
+    standardInput = System.in
+    workingDir = project.rootDir
+    ignoreExitValue = true
+
+    if (OperatingSystem.current() == OperatingSystem.MAC_OS) {
+        // Required to run on macOS
+        jvmArgs += "-XstartOnFirstThread"
+    }
+}
+
+tasks.register('debug', JavaExec) {
+    dependsOn classes
+    main = project.mainClassName
+    classpath = sourceSets.main.runtimeClasspath
+    standardInput = System.in
+    workingDir = project.assetsDir
+    ignoreExitValue = true
+    debug = true
+}
+
+tasks.register('dist', Jar) {
+    archiveFileName = "${appName}-server.jar"
+    duplicatesStrategy(DuplicatesStrategy.EXCLUDE)
+    manifest {
+        attributes 'Main-Class': project.mainClassName
+    }
+    dependsOn configurations.runtimeClasspath
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+    with jar
+}
+
+
+dist.dependsOn classes
+
+eclipse.project.name = appName + "-server"
