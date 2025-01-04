@@ -28,7 +28,7 @@ import kz.ilotterytea.maxon.constants.SettingsConstants;
 import kz.ilotterytea.maxon.localization.LineId;
 import kz.ilotterytea.maxon.localization.LocalizationManager;
 import kz.ilotterytea.maxon.player.Savegame;
-import kz.ilotterytea.maxon.session.SessionClient;
+import kz.ilotterytea.maxon.session.IdentityClient;
 import kz.ilotterytea.maxon.ui.DebugWidget;
 import kz.ilotterytea.maxon.ui.SavegameWidget;
 import kz.ilotterytea.maxon.ui.ShakingImageButton;
@@ -407,7 +407,7 @@ public class MenuScreen implements Screen {
         stage.draw();
 
         // Login button logic
-        SessionClient session = game.getSessionClient();
+        IdentityClient session = game.getIdentityClient();
         if (!session.isProcessing() && !session.isAuthorised() && !loginButton.getText().equals(game.getLocale().getLine(LineId.LoginButton))) {
             loginButton.setText(game.getLocale().getLine(LineId.LoginButton));
             loginButton.clearListeners();
@@ -850,7 +850,7 @@ public class MenuScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
-                MaxonGame.getInstance().getSessionClient().authorize(usernameField.getText(), passwords[0]);
+                MaxonGame.getInstance().getIdentityClient().authorize(usernameField.getText(), passwords[0]);
                 loginButton.setText(game.getLocale().getLine(LineId.LoginProcessing));
                 loginButton.setDisabled(true);
                 // maybe we could somehow fire the close button instead of cv pasting

@@ -14,7 +14,7 @@ import kz.ilotterytea.maxon.utils.RandomUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class SessionClient {
+public class IdentityClient {
     private final Logger log;
 
     private final Preferences sessionPreferences;
@@ -23,9 +23,9 @@ public class SessionClient {
     private String userId, username, password;
     private boolean isProcessing, isAuthorised;
 
-    public SessionClient(Preferences sessionPreferences) {
+    public IdentityClient(Preferences sessionPreferences) {
         startValidationThread();
-        this.log = LoggerFactory.getLogger(SessionClient.class);
+        this.log = LoggerFactory.getLogger(IdentityClient.class);
 
         this.clientToken = RandomUtils.generateRandomString();
         this.sessionPreferences = sessionPreferences;
@@ -67,7 +67,7 @@ public class SessionClient {
         Gdx.net.sendHttpRequest(request, new Net.HttpResponseListener() {
             @Override
             public void handleHttpResponse(Net.HttpResponse httpResponse) {
-                SessionClient.this.isProcessing = false;
+                IdentityClient.this.isProcessing = false;
 
                 try {
                     JsonValue json = new JsonReader().parse(httpResponse.getResultAsString());
@@ -84,12 +84,12 @@ public class SessionClient {
                         return;
                     }
 
-                    SessionClient.this.username = username;
-                    SessionClient.this.password = password;
-                    SessionClient.this.accessToken = json.get("data").getString("accessToken");
-                    SessionClient.this.userId = String.valueOf(json.get("data").get("user").getInt("id"));
-                    SessionClient.this.isAuthorised = true;
-                    log.info("Successfully authorised! Welcome back, {}!", SessionClient.this.username);
+                    IdentityClient.this.username = username;
+                    IdentityClient.this.password = password;
+                    IdentityClient.this.accessToken = json.get("data").getString("accessToken");
+                    IdentityClient.this.userId = String.valueOf(json.get("data").get("user").getInt("id"));
+                    IdentityClient.this.isAuthorised = true;
+                    log.info("Successfully authorised! Welcome back, {}!", IdentityClient.this.username);
                 } catch (Exception e) {
                     log.error("An exception was thrown while authorising", e);
                 }
